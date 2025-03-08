@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import getArticles from '../services/articleService';
+import { getArticles } from '../services/articleService';
 
 const ArticleContainer = styled.div`
   position: relative;
