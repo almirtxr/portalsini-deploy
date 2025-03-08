@@ -115,7 +115,7 @@ const FeaturedArticle = () => {
       try {
         const fetchedArticles = await getArticles();
         const visibleArticles = fetchedArticles.filter(article => article.isVisible);
-        const featuredArticles = fetchedArticles.filter(article => article.featured);
+        const featuredArticles = visibleArticles.filter(article => article.featured);
 
         setArticles(featuredArticles.length > 0 ? featuredArticles : [visibleArticles[visibleArticles.length - 1]]);
       } catch (error) {
