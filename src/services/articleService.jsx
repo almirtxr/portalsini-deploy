@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.1.102:3000/api/articles';
+const API_URL = 'https://api-portalsini.onrender.com/api/articles';
 
 const getArticles = async () => {
   try {

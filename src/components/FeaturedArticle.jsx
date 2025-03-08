@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
+import getArticles from '../services/getArticles';
 
 const ArticleContainer = styled.div`
   position: relative;
@@ -113,11 +113,11 @@ const FeaturedArticle = () => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/articles');
-        const fetchedArticles = response.data.filter(article => article.isVisible);
+        const fetchedArticles = await getArticles();
+        const visibleArticles = fetchedArticles.filter(article => article.isVisible);
         const featuredArticles = fetchedArticles.filter(article => article.featured);
 
-        setArticles(featuredArticles.length > 0 ? featuredArticles : [fetchedArticles[fetchedArticles.length - 1]]);
+        setArticles(featuredArticles.length > 0 ? featuredArticles : [visibleArticles[visibleArticles.length - 1]]);
       } catch (error) {
         console.error('Erro ao buscar artigos:', error);
       } finally {
