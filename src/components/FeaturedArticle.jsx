@@ -11,6 +11,10 @@ const ArticleContainer = styled.div`
   border-radius: 0.75rem;
   animation: fadeIn 0.5s ease-out;
 
+  @media (max-width: 768px) {
+    height: 50vh; /* Reduz altura para celular */
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -41,6 +45,10 @@ const Content = styled.div`
   left: 0;
   right: 0;
   padding: 2rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem; /* Menos padding em telas menores */
+  }
 `;
 
 const Category = styled.span`
@@ -59,8 +67,8 @@ const Title = styled.h1`
   color: white;
   margin-bottom: 1rem;
 
-  @media (min-width: 768px) {
-    font-size: 3rem;
+  @media (max-width: 768px) {
+    font-size: 1.5rem; /* Ajusta o título para telas menores */
   }
 `;
 
@@ -69,6 +77,10 @@ const Excerpt = styled.p`
   font-size: 1.125rem;
   margin-bottom: 1.5rem;
   max-width: 42rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem; /* Texto menor para evitar corte */
+  }
 `;
 
 const ReadButton = styled(Link)`
@@ -103,6 +115,10 @@ const Arrow = styled.button`
   }
 
   ${(props) => (props.$left ? 'left: 1rem;' : 'right: 1rem;')}
+
+  @media (max-width: 768px) {
+    padding: 0.5rem; /* Botões menores no mobile */
+  }
 `;
 
 const FeaturedArticle = () => {
