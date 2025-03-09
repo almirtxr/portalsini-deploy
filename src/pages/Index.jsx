@@ -14,6 +14,10 @@ const MainContent = styled.main`
   max-width: 75%;
   margin: 0 auto;
   padding: 120px 1rem 0;
+
+  @media (max-width: 768px) {
+    max-width: 95%;
+  }
 `;
 
 const SectionTitle = styled.h2`
