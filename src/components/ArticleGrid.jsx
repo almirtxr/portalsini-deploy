@@ -48,6 +48,11 @@ const CardImage = styled.img`
   width: 100%;
   height: 16rem;
   object-fit: cover;  
+  @media (max-width: 768px) {
+    object-fit: contain; /* Garante que toda a imagem seja visível */
+    height: auto;
+    max-height: 100%;
+  }
 `;
 
 const CardContent = styled.div`
