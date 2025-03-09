@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const RedirectToAdmin = () => {
   useEffect(() => {
-    window.location.href = 'http://localhost:3003';
+    window.location.href = 'https://admin-portalsini.netlify.app';
   }, []);
 
   return null; // Não precisa renderizar nada

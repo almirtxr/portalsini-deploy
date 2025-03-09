@@ -5,23 +5,15 @@ import { getArticles } from '../services/articleService';
 
 const ArticleContainer = styled.div`
   position: relative;
-  height: 70vh;
+  height: 80vh;
   width: 100%;
   overflow: hidden;
   border-radius: 0.75rem;
-  animation: fadeIn 0.5s ease-out;
+  display: flex;
+  flex-direction: column; /* Permite empilhar os elementos */
 
   @media (max-width: 768px) {
-    height: 50vh; /* Reduz altura para celular */
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    height: auto; /* Altura dinâmica */
   }
 `;
 
@@ -31,12 +23,23 @@ const ArticleImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  @media (max-width: 768px) {
+    position: static; /* Remove do fundo */
+    object-fit: contain; /* Garante que toda a imagem seja visível */
+    height: auto;
+    max-height: 100%;
+  }
 `;
 
 const Gradient = styled.div`
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+
+  @media (max-width: 768px) {
+    display: none; /* Remove o gradiente no mobile */
+  }
 `;
 
 const Content = styled.div`
@@ -47,7 +50,9 @@ const Content = styled.div`
   padding: 2rem;
 
   @media (max-width: 768px) {
-    padding: 1rem; /* Menos padding em telas menores */
+    position: static; /* Permite que o conteúdo vá para baixo da imagem */
+    padding: 1rem;
+    text-align: center;
   }
 `;
 
@@ -59,6 +64,10 @@ const Category = styled.span`
   color: white;
   font-size: 0.875rem;
   margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const Title = styled.h1`
@@ -66,11 +75,14 @@ const Title = styled.h1`
   font-size: 2.25rem;
   color: white;
   margin-bottom: 1rem;
+  text-align: left;
 
   @media (max-width: 768px) {
-    font-size: 1.5rem; /* Ajusta o título para telas menores */
+    font-size: 1.5rem;
+    color: black; /* Texto preto no mobile */
   }
 `;
+
 
 const Excerpt = styled.p`
   color: rgba(255, 255, 255, 0.9);
@@ -79,9 +91,12 @@ const Excerpt = styled.p`
   max-width: 42rem;
 
   @media (max-width: 768px) {
-    font-size: 0.875rem; /* Texto menor para evitar corte */
+    font-size: 0.875rem;
+    color: black; /* Texto preto no mobile */
+    text-align: left;
   }
 `;
+
 
 const ReadButton = styled(Link)`
   background-color: white;
@@ -97,6 +112,9 @@ const ReadButton = styled(Link)`
   &:hover {
     background-color: rgba(255, 255, 255, 0.9);
   }
+
+  @media (max-width: 768px) {
+    background-color: rgba(0, 0, 0, 0.1);
 `;
 
 const Arrow = styled.button`
@@ -114,11 +132,14 @@ const Arrow = styled.button`
     background: rgba(0, 0, 0, 0.8);
   }
 
-  ${(props) => (props.$left ? 'left: 1rem;' : 'right: 1rem;')}
-
   @media (max-width: 768px) {
-    padding: 0.5rem; /* Botões menores no mobile */
-  }
+    top: 43%;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+  ${(props) => (props.$left ? 'left: 1rem;' : 'right: 1rem;')}
 `;
 
 const FeaturedArticle = () => {
