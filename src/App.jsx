@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 
 const keepServerAwake = async () => {
   try {
-    await fetch("https://api-portalsini.onrender.com/ping"); // Endpoint que não afeta o banco de dados
+    await fetch("https://portalsini-backend-deploy.fly.dev/ping"); // Endpoint que não afeta o banco de dados
   } catch (error) {
     console.error("Erro ao manter o servidor ativo:", error);
   }
