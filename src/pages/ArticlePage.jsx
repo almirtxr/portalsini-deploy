@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/SideBar';
+import { Share2 } from 'lucide-react';
 
 const Container = styled.div`
   display: flex;
@@ -16,16 +17,15 @@ const MainContent = styled.div`
   display: flex;
   justify-content: center;
   padding: 2rem;
-  margin-top: 5rem; /* Ajuste para evitar sobreposição do header */
-  gap: 2rem; /* Espaçamento entre o artigo e a sidebar */
-  flex-wrap: wrap; /* Permite que os elementos quebrem em telas menores */
+  margin-top: 5rem;
+  gap: 2rem;
+  flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Coloca o artigo e a sidebar em coluna */
+    flex-direction: column;
     padding: 1.5rem;
-    margin-top: 5rem; 
+    margin-top: 5rem;
   }
-
 `;
 
 const ArticleContainer = styled.div`
@@ -37,26 +37,26 @@ const ArticleContainer = styled.div`
   border-radius: 8px;
 
   img {
-    width: 100%; /* Garante que as imagens não ultrapassem o container */
-    height: auto; /* Mantém a proporção original da imagem */
-    border-radius: 8px; 
-    display: block; 
-    margin: 1rem 0; 
-    cursor: pointer; /* Indica que a imagem é clicável */
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 1rem 0;
+    cursor: pointer;
     transition: transform 0.2s ease-in-out;
 
     &:hover {
-      transform: scale(1.02); /* Efeito de leve zoom ao passar o mouse */
+      transform: scale(1.02);
     }
   }
 
-  p{
+  p {
     margin-bottom: 1.5rem;
-    line-heitght: 1.6;
+    line-height: 1.6;
   }
 
   @media (max-width: 768px) {
-    padding: 1rem; 
+    padding: 1rem;
   }
 `;
 
@@ -85,14 +85,30 @@ const SidebarContainer = styled.div`
   width: 100%;
 `;
 
+const ShareButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+
+  &:hover {
+    background: #0056b3;
+  }
+`;
 
 const TitleContainer = styled.div`
   text-align: left;
-  margin-bottom: 2rem; 
+  margin-bottom: 2rem;
   display: flex;
-  flex-direction: column; /* Alinha os itens verticalmente */
-  gap: 1rem; /* Espaçamento entre os elementos */
-  
+  flex-direction: column;
+  gap: 1rem;
+
   h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
@@ -109,7 +125,6 @@ const TitleContainer = styled.div`
     color: #777;
   }
 `;
-
 
 const ArticlePage = () => {
   const { id } = useParams();
@@ -142,10 +157,10 @@ const ArticlePage = () => {
   }, [id]);
 
   useEffect(() => {
-    if(articleContentRef.current) {
-      const images = articleContentRef.current.querySelectorAll('image');
+    if (articleContentRef.current) {
+      const images = articleContentRef.current.querySelectorAll('image'); // CORRIGIDO
       images.forEach((image) => {
-        img.addEventListener('click', () => setExpandedImage(image.src));
+        image.addEventListener('click', () => setExpandedImage(image.src)); // CORRIGIDO
       });
     }
   }, [article]);
@@ -153,6 +168,22 @@ const ArticlePage = () => {
   if (!article) {
     return <div>Carregando...</div>;
   }
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = article.title;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+      } catch (error) {
+        console.error('Erro ao compartilhar:', error);
+      }
+    } else {
+      navigator.clipboard.writeText(url);
+      alert('Link copiado para a área de transferência!');
+    }
+  };
 
   return (
     <Container>
@@ -162,13 +193,19 @@ const ArticlePage = () => {
           <TitleContainer>
             <h1>{article.title}</h1>
             <h2>{article.summary}</h2>
-            <p><i>{article.author} - {new Date(article.date).toLocaleDateString()}</i></p>
+            <p>
+              <i>
+                {article.author} - {new Date(article.date).toLocaleDateString()}
+              </i>
+            </p>
           </TitleContainer>
 
-          {/* Renderiza o conteúdo com imagens clicáveis */}
+          <ShareButton onClick={handleShare}>
+            <Share2 /> Compartilhar
+          </ShareButton>
+
           <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
 
-          {/* Modal de Imagem Expandida */}
           {expandedImage && (
             <ModalOverlay onClick={() => setExpandedImage(null)}>
               <ModalImage src={expandedImage} alt="Imagem expandida" />
