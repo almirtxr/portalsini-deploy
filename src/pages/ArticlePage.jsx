@@ -44,6 +44,11 @@ const ArticleContainer = styled.div`
     margin: 1rem 0; 
   }
 
+  p{
+    margin-bottom: 1.5rem;
+    line-heitght: 1.6;
+  }
+
   @media (max-width: 768px) {
     padding: 1rem; 
   }
