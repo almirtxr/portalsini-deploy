@@ -5,8 +5,6 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/SideBar';
-import { use } from 'react';
-
 
 const Container = styled.div`
   display: flex;
@@ -147,7 +145,7 @@ const ArticlePage = () => {
     if(articleContentRef.current) {
       const images = articleContentRef.current.querySelectorAll('img');
       images.forEach((image) => {
-        img.addEventListener('click', () => setExpandedImage(img.src));
+        img.addEventListener('click', () => setExpandedImage(image.src));
       });
     }
   }, [article]);
