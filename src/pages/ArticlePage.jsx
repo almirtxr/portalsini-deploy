@@ -62,9 +62,28 @@ const SidebarContainer = styled.div`
 
 const TitleContainer = styled.div`
   text-align: left;
-  margin-bottom: 2rem;
-  justify-content: space-between;
+  margin-bottom: 2rem; 
+  display: flex;
+  flex-direction: column; /* Alinha os itens verticalmente */
+  gap: 1rem; /* Espaçamento entre os elementos */
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #555;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #777;
+  }
 `;
+
 
 const ArticlePage = () => {
   const { id } = useParams();
