@@ -36,12 +36,19 @@ const ArticleContainer = styled.div`
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+
   img {
     width: 100%; /* Garante que as imagens não ultrapassem o container */
     height: auto; /* Mantém a proporção original da imagem */
     border-radius: 8px; 
     display: block; 
     margin: 1rem 0; 
+    cursor: pointer; /* Indica que a imagem é clicável */
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.02); /* Efeito de leve zoom ao passar o mouse */
+    }
   }
 
   p{
@@ -52,6 +59,26 @@ const ArticleContainer = styled.div`
   @media (max-width: 768px) {
     padding: 1rem; 
   }
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalImage = styled.img`
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 const SidebarContainer = styled.div`
@@ -89,6 +116,7 @@ const ArticlePage = () => {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
+  const [expandedImage, setExpandedImage] = useState(null);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -127,7 +155,21 @@ const ArticlePage = () => {
             <h2>{article.summary}</h2>
             <p><i>{article.author} - {new Date(article.date).toLocaleDateString()}</i></p>
           </TitleContainer>
-          <div dangerouslySetInnerHTML={{ __html: article.content }} />
+          {/* Renderiza o conteúdo com imagens clicáveis */}
+          <div 
+            dangerouslySetInnerHTML={{ 
+              __html: article.content.replace(
+                /<img/g, 
+                `<img onclick="window.expandImage(this.src)"`
+              ) 
+            }} 
+          />
+          {/* Modal de Imagem Expandida */}
+          {expandedImage && (
+            <ModalOverlay onClick={() => setExpandedImage(null)}>
+              <ModalImage src={expandedImage} alt="Imagem expandida" />
+            </ModalOverlay>
+          )}
         </ArticleContainer>
       </MainContent>
       <SidebarContainer>
@@ -137,5 +179,16 @@ const ArticlePage = () => {
     </Container>
   );
 };
+
+// Função global para expandir a imagem
+window.expandImage = (src) => {
+  document.dispatchEvent(new CustomEvent('expandImage', { detail: src }));
+};
+
+// Captura o evento global e atualiza o estado do componente
+document.addEventListener('expandImage', (e) => {
+  const event = new CustomEvent('setExpandedImage', { detail: e.detail });
+  document.dispatchEvent(event);
+});
 
 export default ArticlePage;
