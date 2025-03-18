@@ -143,7 +143,7 @@ const ArticlePage = () => {
 
   useEffect(() => {
     if(articleContentRef.current) {
-      const images = articleContentRef.current.querySelectorAll('img');
+      const images = articleContentRef.current.querySelectorAll('image');
       images.forEach((image) => {
         img.addEventListener('click', () => setExpandedImage(image.src));
       });
