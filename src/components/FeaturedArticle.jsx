@@ -88,11 +88,23 @@ const Excerpt = styled.p`
   color: rgba(255, 255, 255, 0.9);
   font-size: 1.125rem;
   margin-bottom: 1.5rem;
-  max-width: 42rem;
+  max-width: 50rem;
 
   @media (max-width: 768px) {
     font-size: 0.875rem;
     color: black; /* Texto preto no mobile */
+    text-align: left;
+  }
+`;
+
+const Author = styled.p`
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  max-width: 42rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
     text-align: left;
   }
 `;
@@ -196,6 +208,7 @@ const FeaturedArticle = () => {
             <Category>{articles[currentIndex].category}</Category>
             <Title>{articles[currentIndex].title}</Title>
             <Excerpt>{articles[currentIndex].summary}</Excerpt>
+            <Author>{articles[currentIndex].author}</Author>
             <ReadButton to={`/articles/${articles[currentIndex].id}`}>Ler mais</ReadButton>
           </Content>
           <Arrow onClick={nextArticle}>❯</Arrow>
