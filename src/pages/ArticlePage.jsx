@@ -89,8 +89,8 @@ const ShareButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #007bff;
-  color: white;
+  background: white;
+  color: #000;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 5px;
@@ -98,7 +98,7 @@ const ShareButton = styled.button`
   font-size: 1rem;
 
   &:hover {
-    background: #0056b3;
+    background: #F8F8FF;
   }
 `;
 
