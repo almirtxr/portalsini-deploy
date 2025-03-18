@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/SideBar';
+import { use } from 'react';
 
 
 const Container = styled.div`
@@ -117,6 +118,7 @@ const ArticlePage = () => {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [expandedImage, setExpandedImage] = useState(null);
+  const articleContentRef = useRef(null);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -141,6 +143,15 @@ const ArticlePage = () => {
     fetchArticle();
   }, [id]);
 
+  useEffect(() => {
+    if(articleContentRef.current) {
+      const images = articleContentRef.current.querySelectorAll('img');
+      images.forEach((image) => {
+        img.addEventListener('click', () => setExpandedImage(img.src));
+      });
+    }
+  }, [article]);
+
   if (!article) {
     return <div>Carregando...</div>;
   }
@@ -155,15 +166,10 @@ const ArticlePage = () => {
             <h2>{article.summary}</h2>
             <p><i>{article.author} - {new Date(article.date).toLocaleDateString()}</i></p>
           </TitleContainer>
+
           {/* Renderiza o conteúdo com imagens clicáveis */}
-          <div 
-            dangerouslySetInnerHTML={{ 
-              __html: article.content.replace(
-                /<img/g, 
-                `<img onclick="window.expandImage(this.src)"`
-              ) 
-            }} 
-          />
+          <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
+
           {/* Modal de Imagem Expandida */}
           {expandedImage && (
             <ModalOverlay onClick={() => setExpandedImage(null)}>
@@ -179,16 +185,5 @@ const ArticlePage = () => {
     </Container>
   );
 };
-
-// Função global para expandir a imagem
-window.expandImage = (src) => {
-  document.dispatchEvent(new CustomEvent('expandImage', { detail: src }));
-};
-
-// Captura o evento global e atualiza o estado do componente
-document.addEventListener('expandImage', (e) => {
-  const event = new CustomEvent('setExpandedImage', { detail: e.detail });
-  document.dispatchEvent(event);
-});
 
 export default ArticlePage;

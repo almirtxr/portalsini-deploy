@@ -119,7 +119,7 @@ const ArticleGrid = () => {
               <CardExcerpt>{articles.excerpt}</CardExcerpt>
             </CardContent>
             <CardFooter>
-              <CardMeta>Por {articles.author}</CardMeta>
+              <CardMeta>{articles.author}</CardMeta>
               <CardMeta>{new Date(articles.date).toLocaleDateString()}</CardMeta>
             </CardFooter>
           </CardLink>
