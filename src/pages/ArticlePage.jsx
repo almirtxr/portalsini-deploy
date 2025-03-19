@@ -30,6 +30,10 @@ const MainContent = styled.div`
 
 const ArticleContainer = styled.div`
   max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   width: 100%;
   padding: 2rem;
   background: white;
