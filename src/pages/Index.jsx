@@ -31,18 +31,12 @@ const Section = styled.section`
 `;
 
 const Index = () => {
-  const featuredArticle = {
-    title: "Lorem ipsum dolor sit amet consectetur",
-    excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23",
-    category: "Lorem Ipsum"
-  };
 
   return (
     <PageContainer>
       <Header />
       <MainContent>
-        <FeaturedArticle {...featuredArticle} />
+        <FeaturedArticle/>
         <Section>
           <SectionTitle>Outras notícias</SectionTitle>
           <ArticleGrid />
