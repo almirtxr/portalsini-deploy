@@ -10,23 +10,8 @@ import Contact from './pages/Contact';
 
 const queryClient = new QueryClient();
 
-const keepServerAwake = async () => {
-  try {
-    await fetch("https://portalsini-backend-deploy.fly.dev/ping"); // Endpoint que não afeta o banco de dados
-  } catch (error) {
-    console.error("Erro ao manter o servidor ativo:", error);
-  }
-};
 
 const App = () => {
-  useEffect(() => {
-    keepServerAwake(); // Executa imediatamente ao carregar
-
-    const interval = setInterval(keepServerAwake, 10 * 60 * 1000); // A cada 10 minutos
-
-    return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <Router>

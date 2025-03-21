@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getArticleByID, getArticleByCategory } from '../services/articleService';
+import { getArticleByID, getArticleByCategory, postArticleReads } from '../services/articleService';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -143,6 +143,7 @@ const ArticlePage = () => {
         const articleData = await getArticleByID(id);
         setArticle(articleData);
         fetchRelatedArticles(articleData.category);
+        await postArticleReads(id);
       } catch (error) {
         console.error('Erro ao buscar artigo:', error);
       }
