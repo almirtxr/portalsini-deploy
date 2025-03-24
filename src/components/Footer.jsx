@@ -112,7 +112,7 @@ const Footer = () => {
       </LogoContainer>
       <FooterPages>
         <ul>
-          <li><FooterButton to="/">Página Inicial</FooterButton></li>
+          <li><FooterButton to="/">Início</FooterButton></li>
           <li><FooterButton to="/contato">Contato</FooterButton></li>
         </ul>
       </FooterPages>
