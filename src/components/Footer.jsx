@@ -9,96 +9,98 @@ const FooterContainer = styled.footer`
   background-color: #c78a47;
   margin-top: 2rem;
   display: flex;
-  flex-wrap: wrap; /* Permite que os itens quebrem em uma nova linha */
+  flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
   position: relative;
   bottom: 0;
-  padding: 1rem 0;
+  padding: 2rem 0;
 
-  /* Media queries para diferentes tamanhos de tela */
   @media (max-width: 768px) {
     flex-direction: column;
-    min-height: 15rem;
+    min-height: 6rem;
     justify-content: center;
-  }
-
-  @media (min-width: 769px) and (max-width: 1024px) {
-    flex-direction: row;
-    min-height: 12rem;
-  }
-
-  @media (min-width: 1025px) {
-    flex-direction: row;
-    min-height: 12rem;
+    padding: 1.5rem 0;
   }
 `;
 
 const LogoContainer = styled.div`
-  flex: 1 1 100%; /* Garante que o logo ocupe toda a largura disponível */
+  flex: 1;
   text-align: center;
-  margin-bottom: 1rem;
-
+  padding-left: 8rem; /* Mantém um alinhamento mais uniforme */
+  
   img {
-    max-width: 12rem;
+    max-width: 10rem;
     padding: 0 4px;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 `;
 
 const FooterPages = styled.div`
+  padding: 0 4rem; /* Reduz o espaçamento lateral */
+  
   ul {
     list-style: none;
     padding: 0;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px; /* Mantém espaçamento equilibrado */
 
     @media (max-width: 768px) {
       flex-direction: row;
       gap: 16px;
     }
   }
-  
+
   li {
     cursor: pointer;
     transition: color 0.3s ease-in-out;
   }
-  
+
   li:hover {
-    color: #f9c45d;
+    color: white;
   }
 `;
 
 const FooterIcons = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 0 4rem; /* Ajusta para alinhar melhor */
+
+  h4 {
+    margin-bottom: 0.5rem;
+  }
+
   div {
     display: flex;
-    gap: 12px;
-    margin-top: 8px;
+    gap: 1.5rem; /* Mantém espaçamento uniforme */
+    align-items: center;
   }
-`;
-
-const FooterAuthor = styled.div`
-  text-align: center;
-  h1 {
-    font-size: 1rem;
-    margin: 4px 0;
+  @media (max-width: 768px) {
+    margin-top: 1rem;
   }
 `;
 
 const FooterButton = styled(Link)`
   text-decoration: none;
   color: inherit;
-  justify-content: space-between;
+  justify-content: center;
   background-color: #c78a47;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   transition: background-color 0.3s ease-in-out;
 
   &:hover {
-    background-color: #c78a47;
+    text-color: white;
   }
 `;
 
@@ -106,12 +108,11 @@ const Footer = () => {
   return (
     <FooterContainer>
       <LogoContainer>
-        <img src="/marca-principal.png" alt="Logo" />
+        <img src="/Portal-Sini-branco-apenas-nome.png" alt="Logo" />
       </LogoContainer>
       <FooterPages>
         <ul>
           <li><FooterButton to="/">Página Inicial</FooterButton></li>
-          <li><FooterButton to="/sobre">Sobre</FooterButton></li>
           <li><FooterButton to="/contato">Contato</FooterButton></li>
         </ul>
       </FooterPages>
@@ -123,10 +124,6 @@ const Footer = () => {
           <LinkedInIcon />
         </div>
       </FooterIcons>
-      <FooterAuthor>
-        <h1>Criado por:</h1>
-        <h1>Brenda dos Santos Teixeira</h1>
-      </FooterAuthor>
     </FooterContainer>
   );
 };
