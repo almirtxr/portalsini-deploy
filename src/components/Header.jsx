@@ -37,12 +37,23 @@ const HeaderLeft = styled.div`
 const HeaderRight = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 2rem;
+  font-family: 'Inter', sans-serif; /* Altera a fonte */
+
+  @media (max-width: 768px) {
+    .user-icon {
+      display: none; /* Oculta o ícone de usuário em telas menores */
+    }
+  }
 `;
 
 const Logo = styled.img`
   height: 64px;
   width: auto;
+
+  @media (max-width: 768px) {
+    height: 48px; /* Reduz o tamanho do logo em telas menores */
+  }
 `;
 
 const Button = styled.button`
@@ -50,11 +61,18 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
   color: black;
+  font-family: 'Inter', sans-serif; /* Altera a fonte */
+  font-size: 1rem; /* Tamanho padrão do texto */
   transition: color 0.3s, background-color 0.3s;
 
   &:hover {
-    color: #F9C45D;
-    background-color: rgba(0, 0, 0, 0.1);
+    color: #FFFFFF;
+    background-color: #C78A47;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem; /* Aumenta o tamanho do texto em telas menores */
+    font-family: 'Inter', sans-serif; /* Altera a fonte em telas menores */
   }
 
   .icon {
@@ -74,8 +92,11 @@ const Header = () => {
             </Link>
           </HeaderLeft>
           <HeaderRight>
-            <Link to ="/admin">
-              <Button>
+            <Link to="/sobre">
+              <Button>Sobre</Button>
+            </Link>
+            <Link to="/admin">
+              <Button className="user-icon">
                 <User className="icon" />
               </Button>
             </Link>

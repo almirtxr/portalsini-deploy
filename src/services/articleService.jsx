@@ -32,4 +32,13 @@ const getArticleByCategory = async (category) => {
   }
 }
 
-export { getArticles, getArticleByID, getArticleByCategory };
+const postArticleReads = async (id) => {
+  try {
+    await axios.post(`${API_URL}/${id}/read`);
+  } catch (error) {
+    console.error('Erro ao registrar leitura:', error);
+    throw error;
+  }
+}
+
+export { getArticles, getArticleByID, getArticleByCategory, postArticleReads };
