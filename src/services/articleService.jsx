@@ -51,4 +51,4 @@ const postArticleReads = async (id) => {
   }
 }
 
-export { getArticles, getArticleByID, getArticleByCategory, postArticleReads };
+export { getArticles, getArticleByID, getArticleByCategory, getArticleBySlug, postArticleReads };
