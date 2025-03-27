@@ -22,6 +22,16 @@ const getArticleByID = async (id) => {
   }
 }
 
+const getArticleBySlug = async (slug) => {
+  try {
+    const response = await axios.get(`${API_URL}?slug=${slug}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar artigo:', error);
+    throw error;
+  }
+}
+
 const getArticleByCategory = async (category) => {
   try {
     const response = await axios.get(`${API_URL}?category=${category}`);

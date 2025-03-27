@@ -19,7 +19,7 @@ const App = () => {
           <Route path="/" element={<Index />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/sobre" element={<About />} />
-          <Route path="/articles/:id" element={<ArticlePage />} />
+          <Route path="/articles/:slug" element={<ArticlePage />} />
           <Route path="/admin" element={<RedirectToAdmin />} />
           <Route path="/contato" element={<Contact />} />
         </Routes>

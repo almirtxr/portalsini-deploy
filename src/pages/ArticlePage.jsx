@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getArticleByID, getArticleByCategory, postArticleReads } from '../services/articleService';
+import { getArticleBySlug, getArticleByCategory, postArticleReads } from '../services/articleService';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -131,7 +131,7 @@ const TitleContainer = styled.div`
 `;
 
 const ArticlePage = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [expandedImage, setExpandedImage] = useState(null);
@@ -140,33 +140,40 @@ const ArticlePage = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const articleData = await getArticleByID(id);
+        const articleData = await getArticleBySlug(slug);
         setArticle(articleData);
-        fetchRelatedArticles(articleData.category);
-        await postArticleReads(id);
+        fetchRelatedArticles(articleData.category, articleData.id);
+        await postArticleReads(articleData.id);
       } catch (error) {
         console.error('Erro ao buscar artigo:', error);
       }
     };
 
-    const fetchRelatedArticles = async (category) => {
+    const fetchRelatedArticles = async (category, articleId) => {
       try {
         const articlesData = await getArticleByCategory(category);
-        setRelatedArticles(articlesData.filter((articleData) => articleData.id !== id));
+        setRelatedArticles(articlesData.filter((articleData) => articleData.id !== articleId));
       } catch (error) {
         console.error('Erro ao buscar artigos relacionados:', error);
       }
     };
 
     fetchArticle();
-  }, [id]);
+  }, [slug]);
 
   useEffect(() => {
     if (articleContentRef.current) {
-      const images = articleContentRef.current.querySelectorAll('image'); // CORRIGIDO
-      images.forEach((image) => {
-        image.addEventListener('click', () => setExpandedImage(image.src)); // CORRIGIDO
-      });
+      const images = articleContentRef.current.querySelectorAll('image');
+      
+      const handleClick = (event) => {
+        setExpandedImage(event.target.src);
+      };
+
+      images.forEach((image) => image.addEventListener('click', handleClick));
+
+      return () => {
+        images.forEach((image) => image.removeEventListener('click', handleClick));
+      };
     }
   }, [article]);
 
@@ -227,3 +234,4 @@ const ArticlePage = () => {
 };
 
 export default ArticlePage;
+
