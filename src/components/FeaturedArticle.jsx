@@ -209,7 +209,7 @@ const FeaturedArticle = () => {
             <Title>{articles[currentIndex].title}</Title>
             <Excerpt>{articles[currentIndex].summary}</Excerpt>
             <Author>{articles[currentIndex].author}</Author>
-            <ReadButton to={`/articles/${articles[currentIndex].id}`}>Ler mais</ReadButton>
+            <ReadButton to={`/articles/${articles[currentIndex].slug}`}>Ler mais</ReadButton>
           </Content>
           <Arrow onClick={nextArticle}>❯</Arrow>
         </>

@@ -111,7 +111,7 @@ const ArticleGrid = () => {
     <Grid>
       {articles.map((articles) => (
         <Card key={articles.id}>
-          <CardLink to={`/articles/${articles.id}`}>
+          <CardLink to={`/articles/${articles.slug}`}>
             <CardImage src={articles.banner} alt={articles.title} />
             <CardContent>
               <CardCategory>{articles.category}</CardCategory>

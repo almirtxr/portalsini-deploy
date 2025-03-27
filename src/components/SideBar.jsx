@@ -82,7 +82,7 @@ const Sidebar = ({ articles }) => {
           {articles.filter(article => article.isVisible).map((article) => (
             <SidebarItem key={article.id}>
               <CategoryTag>{article.category}</CategoryTag>
-              <ArticleLink to={`/articles/${article.id}`}>{article.title}</ArticleLink>
+              <ArticleLink to={`/articles/${article.slug}`}>{article.title}</ArticleLink>
             </SidebarItem>
           ))}
         </SidebarContainer>
