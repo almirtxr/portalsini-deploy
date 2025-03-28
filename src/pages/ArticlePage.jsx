@@ -135,24 +135,41 @@ const ArticlePage = () => {
   const [article, setArticle] = useState(null);
   const [relatedArticles, setRelatedArticles] = useState([]);
   const [expandedImage, setExpandedImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const articleContentRef = useRef(null);
 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
+        setLoading(true);
         const articleData = await getArticleBySlug(slug);
+        
+        if (!articleData) {
+          throw new Error('Artigo não encontrado');
+        }
+        
         setArticle(articleData);
-        fetchRelatedArticles(articleData.category, articleData.id);
-        await postArticleReads(articleData.id);
+        
+        if (articleData.category) {
+          fetchRelatedArticles(articleData.category, articleData.id);
+        }
+        
+        if (articleData.id) {
+          await postArticleReads(articleData.id);
+        }
       } catch (error) {
         console.error('Erro ao buscar artigo:', error);
+        setError(error.message || 'Erro ao carregar o artigo');
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchRelatedArticles = async (category, articleId) => {
       try {
         const articlesData = await getArticleByCategory(category);
-        setRelatedArticles(articlesData.filter((articleData) => articleData.id !== articleId));
+        setRelatedArticles(articlesData.filter(article => article.id !== articleId));
       } catch (error) {
         console.error('Erro ao buscar artigos relacionados:', error);
       }
@@ -162,8 +179,8 @@ const ArticlePage = () => {
   }, [slug]);
 
   useEffect(() => {
-    if (articleContentRef.current) {
-      const images = articleContentRef.current.querySelectorAll('image');
+    if (articleContentRef.current && article?.content) {
+      const images = articleContentRef.current.querySelectorAll('img');
       
       const handleClick = (event) => {
         setExpandedImage(event.target.src);
@@ -177,8 +194,16 @@ const ArticlePage = () => {
     }
   }, [article]);
 
+  if (loading) {
+    return <LoadingContainer>Carregando...</LoadingContainer>;
+  }
+
+  if (error) {
+    return <ErrorContainer>{error}</ErrorContainer>;
+  }
+
   if (!article) {
-    return <div>Carregando...</div>;
+    return <ErrorContainer>Artigo não encontrado</ErrorContainer>;
   }
 
   const handleShare = async () => {
@@ -205,18 +230,19 @@ const ArticlePage = () => {
           <TitleContainer>
             <h1>{article.title}</h1>
             <h2>{article.summary}</h2>
-            <p>
+            <MetaData>
               <i>
-                {article.author} - {new Date(article.date).toLocaleDateString()}
+                {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
+                {article.reads || 0} leitura{article.reads !== 1 ? 's' : ''}
               </i>
-            </p>
+            </MetaData>
           </TitleContainer>
 
           <ShareButton onClick={handleShare}>
             <Share2 /> Compartilhar
           </ShareButton>
 
-          <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
+          <ArticleContent ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
 
           {expandedImage && (
             <ModalOverlay onClick={() => setExpandedImage(null)}>
@@ -226,7 +252,9 @@ const ArticlePage = () => {
         </ArticleContainer>
       </MainContent>
       <SidebarContainer>
-        <Sidebar articles={relatedArticles} />
+        {relatedArticles.length > 0 && (
+          <Sidebar articles={relatedArticles} title="Artigos Relacionados" />
+        )}
       </SidebarContainer>
       <Footer />
     </Container>
