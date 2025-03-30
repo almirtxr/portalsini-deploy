@@ -40,6 +40,31 @@ const LogoContainer = styled.div`
   }
 `;
 
+const LineAuthor = styled.div`
+  width: 100%;
+  height: 2px;
+  gradient: linear-gradient(to right, #c78a47, #000);
+  background-color: #000;
+`;
+
+const AuthorContainer = styled.div`
+  text-align: center;
+  background-color:rgb(117, 77, 33);
+  padding: 1rem;
+`;
+
+const AuthorText = styled(Link)`
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7); /* Texto mais transparente */
+  font-weight: 400;
+  text-decoration: none;
+
+  &:hover {
+    color: white; /* Muda a cor do texto ao passar o mouse */
+    cursor: pointer;
+  }
+`;
+
 const FooterPages = styled.div`
   padding: 0 4rem; /* Reduz o espaçamento lateral */
   
@@ -106,25 +131,31 @@ const FooterButton = styled(Link)`
 
 const Footer = () => {
   return (
-    <FooterContainer>
-      <LogoContainer>
-        <img src="/Portal-Sini-branco-apenas-nome.png" alt="Logo" />
-      </LogoContainer>
-      <FooterPages>
-        <ul>
-          <li><FooterButton to="/">Início</FooterButton></li>
-          <li><FooterButton to="/contato">Contato</FooterButton></li>
-        </ul>
-      </FooterPages>
-      <FooterIcons>
-        <h4>Conecte-se</h4>
-        <div>
-          <InstagramIcon />
-          <XIcon />
-          <LinkedInIcon />
-        </div>
-      </FooterIcons>
-    </FooterContainer>
+    <>
+      <FooterContainer>
+        <LogoContainer>
+          <img src="/Portal-Sini-branco-apenas-nome.png" alt="Logo" />
+        </LogoContainer>
+        <FooterPages>
+          <ul>
+            <li><FooterButton to="/">Início</FooterButton></li>
+            <li><FooterButton to="/contato">Contato</FooterButton></li>
+          </ul>
+        </FooterPages>
+        <FooterIcons>
+          <h4>Conecte-se</h4>
+          <div>
+            <InstagramIcon />
+            <XIcon />
+            <LinkedInIcon />
+          </div>
+        </FooterIcons>
+      </FooterContainer>
+      <LineAuthor />
+      <AuthorContainer>
+        <AuthorText to="/linkedin">Desenvolvido por: <strong>Almir Gabriel</strong></AuthorText>
+      </AuthorContainer>
+    </>
   );
 };
 

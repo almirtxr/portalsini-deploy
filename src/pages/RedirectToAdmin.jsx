@@ -8,4 +8,12 @@ const RedirectToAdmin = () => {
   return null; // Não precisa renderizar nada
 };
 
-export default RedirectToAdmin;
+const RedirectToLinkedin = () => {
+  useEffect(() => {
+    window.location.href = 'https://www.linkedin.com/in/almirgabriel/';
+  }, []);
+
+  return null; // Não precisa renderizar nada
+}
+
+export { RedirectToAdmin, RedirectToLinkedin };

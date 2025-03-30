@@ -5,7 +5,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import ArticlePage from "./pages/ArticlePage";  
-import RedirectToAdmin from './pages/RedirectToAdmin';
+import { RedirectToAdmin, RedirectToLinkedin } from './pages/RedirectToAdmin';
 import Contact from './pages/Contact';
 
 const queryClient = new QueryClient();
@@ -21,6 +21,7 @@ const App = () => {
           <Route path="/sobre" element={<About />} />
           <Route path="/articles/:slug" element={<ArticlePage />} />
           <Route path="/admin" element={<RedirectToAdmin />} />
+          <Route path="/linkedin" element={<RedirectToLinkedin />} />
           <Route path="/contato" element={<Contact />} />
         </Routes>
       </Router>
