@@ -195,15 +195,15 @@ const ArticlePage = () => {
   }, [article]);
 
   if (loading) {
-    return <LoadingContainer>Carregando...</LoadingContainer>;
+    return <div>Carregando...</div>;
   }
 
   if (error) {
-    return <ErrorContainer>{error}</ErrorContainer>;
+    return <div>{error}</div>;
   }
 
   if (!article) {
-    return <ErrorContainer>Artigo não encontrado</ErrorContainer>;
+    return <div>Artigo não encontrado</div>;
   }
 
   const handleShare = async () => {
