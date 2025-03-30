@@ -233,7 +233,6 @@ const ArticlePage = () => {
             <p>
               <i>
                 {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
-                {article.reads || 0} leitura{article.reads !== 1 ? 's' : ''}
               </i>
             </p>
           </TitleContainer>
