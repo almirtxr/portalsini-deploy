@@ -230,19 +230,19 @@ const ArticlePage = () => {
           <TitleContainer>
             <h1>{article.title}</h1>
             <h2>{article.summary}</h2>
-            <MetaData>
+            <p>
               <i>
                 {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
                 {article.reads || 0} leitura{article.reads !== 1 ? 's' : ''}
               </i>
-            </MetaData>
+            </p>
           </TitleContainer>
 
           <ShareButton onClick={handleShare}>
             <Share2 /> Compartilhar
           </ShareButton>
 
-          <ArticleContent ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
+          <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
 
           {expandedImage && (
             <ModalOverlay onClick={() => setExpandedImage(null)}>
