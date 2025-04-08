@@ -29,7 +29,7 @@ const MainContent = styled.div`
 `;
 
 const ArticleContainer = styled.div`
-  max-width: 800px;
+  max-width: 900px;
   display: flex;
   flex-direction: column;
   align-items: center;
