@@ -157,7 +157,7 @@ const Arrow = styled.button`
 const FeaturedArticle = () => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0); // Inicializa com 0 para evitar problemas
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -176,6 +176,13 @@ const FeaturedArticle = () => {
 
     fetchArticles();
   }, []);
+
+  // Atualiza o índice para o último artigo após os artigos serem carregados
+  useEffect(() => {
+    if (articles.length > 0) {
+      setCurrentIndex(articles.length - 1);
+    }
+  }, [articles]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -207,11 +214,7 @@ const FeaturedArticle = () => {
           <Content>
             <Category>{articles[currentIndex].category}</Category>
             <Title>{articles[currentIndex].title}</Title>
-            <Excerpt>{articles[currentIndex].summary}</Excerpt>
-            <Author>{articles[currentIndex].author}</Author>
-            <ReadButton to={`/articles/${articles[currentIndex].slug}`}>Ler mais</ReadButton>
           </Content>
-          <Arrow onClick={nextArticle}>❯</Arrow>
         </>
       )}
     </ArticleContainer>
