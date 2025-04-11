@@ -7,6 +7,7 @@ import About from "./pages/About";
 import ArticlePage from "./pages/ArticlePage";  
 import { RedirectToAdmin, RedirectToLinkedin } from './pages/RedirectToAdmin';
 import Contact from './pages/Contact';
+import MockArticlePage from './pages/MockArticlePage';
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,8 @@ const App = () => {
           <Route path="/admin" element={<RedirectToAdmin />} />
           <Route path="/linkedin" element={<RedirectToLinkedin />} />
           <Route path="/contato" element={<Contact />} />
+          <Route path="/mock-article" element={<MockArticlePage />} />
+
         </Routes>
       </Router>
     </QueryClientProvider>
