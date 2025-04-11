@@ -16,6 +16,7 @@ const Container = styled.div`
 const MainContent = styled.div`
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   padding: 2rem;
   margin-top: 5rem;
   gap: 2rem;
@@ -24,9 +25,19 @@ const MainContent = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     padding: 1.5rem;
-    margin-top: 5rem;
   }
 `;
+
+const ArticleWrapper = styled.div`
+  flex: 3;
+  min-width: 300px;
+`;
+
+const SidebarWrapper = styled.div`
+  flex: 1;
+  min-width: 280px;
+`;
+
 
 const ArticleContainer = styled.div`
   max-width: 900px;
@@ -225,36 +236,39 @@ const ArticlePage = () => {
   return (
     <Container>
       <Header />
-      <MainContent>
-        <ArticleContainer>
-          <TitleContainer>
-            <h1>{article.title}</h1>
-            <h2>{article.summary}</h2>
-            <p>
-              <i>
-                {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
-              </i>
-            </p>
-          </TitleContainer>
+        <MainContent>
+          <ArticleWrapper>
+            <ArticleContainer>
+              <TitleContainer>
+                <h1>{article.title}</h1>
+                <h2>{article.summary}</h2>
+                <p>
+                  <i>
+                    {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
+                  </i>
+                </p>
+              </TitleContainer>
 
-          <ShareButton onClick={handleShare}>
-            <Share2 /> Compartilhar
-          </ShareButton>
+              <ShareButton onClick={handleShare}>
+                <Share2 /> Compartilhar
+              </ShareButton>
 
-          <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
+              <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
 
-          {expandedImage && (
-            <ModalOverlay onClick={() => setExpandedImage(null)}>
-              <ModalImage src={expandedImage} alt="Imagem expandida" />
-            </ModalOverlay>
+              {expandedImage && (
+                <ModalOverlay onClick={() => setExpandedImage(null)}>
+                  <ModalImage src={expandedImage} alt="Imagem expandida" />
+                </ModalOverlay>
+              )}
+            </ArticleContainer>
+          </ArticleWrapper>
+
+          {relatedArticles.length > 0 && (
+            <SidebarWrapper>
+              <Sidebar articles={relatedArticles} />
+            </SidebarWrapper>
           )}
-        </ArticleContainer>
-      </MainContent>
-      <SidebarContainer>
-        {relatedArticles.length > 0 && (
-          <Sidebar articles={relatedArticles} title="Artigos Relacionados" />
-        )}
-      </SidebarContainer>
+        </MainContent>
       <Footer />
     </Container>
   );
