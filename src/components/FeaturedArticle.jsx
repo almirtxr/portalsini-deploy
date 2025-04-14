@@ -214,7 +214,7 @@ const FeaturedArticle = () => {
           <Content>
             <Category>{articles[currentIndex].category}</Category>
             <Title>{articles[currentIndex].title}</Title>
-            <Excerpt>{articles[currentIndex].excerpt}</Excerpt>
+            <Excerpt>{articles[currentIndex].summary}</Excerpt>
             <Author>{articles[currentIndex].author}</Author>
             <ReadButton to={`/articles/${articles[currentIndex].slug}`}>Ler mais</ReadButton>
           </Content>
