@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/SideBar';
 import { Share2 } from 'lucide-react';
+import { ArticleStyles } from '../styles/ArticleStyles';
 
 const Container = styled.div`
   display: flex;
@@ -50,29 +51,6 @@ const ArticleContainer = styled.div`
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    display: block;
-    margin: 1rem 0;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-
-    &:hover {
-      transform: scale(1.02);
-    }
-  }
-
-  p {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
 `;
 
 const ModalOverlay = styled.div`
@@ -191,14 +169,15 @@ const ArticlePage = () => {
 
   useEffect(() => {
     if (articleContentRef.current && article?.content) {
-      const images = articleContentRef.current.querySelectorAll('img');
+      const images = articleContentRef.current.querySelectorAll('.image-with-text img, .article-content img:not(.image-with-text img)');
       
       const handleClick = (event) => {
         setExpandedImage(event.target.src);
+        event.stopPropagation(); // Impede que o clique propague para outros elementos
       };
-
+  
       images.forEach((image) => image.addEventListener('click', handleClick));
-
+  
       return () => {
         images.forEach((image) => image.removeEventListener('click', handleClick));
       };
@@ -236,39 +215,44 @@ const ArticlePage = () => {
   return (
     <Container>
       <Header />
-        <MainContent>
-          <ArticleWrapper>
-            <ArticleContainer>
-              <TitleContainer>
-                <h1>{article.title}</h1>
-                <h2>{article.summary}</h2>
-                <p>
-                  <i>
-                    {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
-                  </i>
-                </p>
-              </TitleContainer>
+      <MainContent>
+        <ArticleWrapper>
+          <ArticleContainer>
+            <TitleContainer>
+              <h1>{article.title}</h1>
+              <h2>{article.summary}</h2>
+              <p>
+                <i>
+                  {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
+                </i>
+              </p>
+            </TitleContainer>
 
-              <ShareButton onClick={handleShare}>
-                <Share2 /> Compartilhar
-              </ShareButton>
+            <ShareButton onClick={handleShare}>
+              <Share2 /> Compartilhar
+            </ShareButton>
 
-              <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
+            <ArticleStyles />
+            <div 
+              className="article-content" 
+              ref={articleContentRef} 
+              dangerouslySetInnerHTML={{ __html: article.content }} 
+            />
+            
+            {expandedImage && (
+              <ModalOverlay onClick={() => setExpandedImage(null)}>
+                <ModalImage src={expandedImage} alt="Imagem expandida" />
+              </ModalOverlay>
+            )}
+          </ArticleContainer>
+        </ArticleWrapper>
 
-              {expandedImage && (
-                <ModalOverlay onClick={() => setExpandedImage(null)}>
-                  <ModalImage src={expandedImage} alt="Imagem expandida" />
-                </ModalOverlay>
-              )}
-            </ArticleContainer>
-          </ArticleWrapper>
-
-          {relatedArticles.length > 0 && (
-            <SidebarWrapper>
-              <Sidebar articles={relatedArticles} />
-            </SidebarWrapper>
-          )}
-        </MainContent>
+        {relatedArticles.length > 0 && (
+          <SidebarWrapper>
+            <Sidebar articles={relatedArticles} />
+          </SidebarWrapper>
+        )}
+      </MainContent>
       <Footer />
     </Container>
   );
