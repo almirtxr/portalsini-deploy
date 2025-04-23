@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/SideBar';
 import { Share2 } from 'lucide-react';
-import { ArticleStyles } from '../styles/ArticleStyles';
+import { ArticleStyles } from '../styles/ArticlesStyles';
 
 const Container = styled.div`
   display: flex;
