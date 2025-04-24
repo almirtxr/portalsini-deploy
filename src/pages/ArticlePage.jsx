@@ -59,18 +59,54 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: fadeIn 0.3s forwards;
+  
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
 `;
 
 const ModalImage = styled.img`
   max-width: 90%;
-  max-height: 90%;
+  max-height: 90vh;
   border-radius: 8px;
+  cursor: zoom-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+  animation: zoomIn 0.3s forwards;
+  
+  @keyframes zoomIn {
+    to { transform: scale(1); }
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  font-size: 20px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
 `;
 
 const SidebarContainer = styled.div`
@@ -169,20 +205,48 @@ const ArticlePage = () => {
 
   useEffect(() => {
     if (articleContentRef.current && article?.content) {
-      const images = articleContentRef.current.querySelectorAll('.image-with-text img, .article-content img:not(.image-with-text img)');
+      // Seleciona todas as imagens no conteúdo
+      const images = articleContentRef.current.querySelectorAll('.article-content img');
       
       const handleClick = (event) => {
+        // Impede que o clique propague para outros elementos
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Define a imagem para ser exibida no modal
         setExpandedImage(event.target.src);
-        event.stopPropagation(); // Impede que o clique propague para outros elementos
       };
   
-      images.forEach((image) => image.addEventListener('click', handleClick));
+      // Adiciona o evento de clique a todas as imagens
+      images.forEach((image) => {
+        image.addEventListener('click', handleClick);
+        
+        // Adiciona cursor pointer para indicar que é clicável
+        image.style.cursor = 'pointer';
+      });
   
+      // Limpa os event listeners quando o componente é desmontado
       return () => {
-        images.forEach((image) => image.removeEventListener('click', handleClick));
+        images.forEach((image) => {
+          image.removeEventListener('click', handleClick);
+        });
       };
     }
   }, [article]);
+
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && expandedImage) {
+        setExpandedImage(null);
+      }
+    };
+  
+    window.addEventListener('keydown', handleEscKey);
+    
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
+    };
+  }, [expandedImage]);
 
   if (loading) {
     return <div>Carregando...</div>;
@@ -240,10 +304,15 @@ const ArticlePage = () => {
             />
             
             {expandedImage && (
-              <ModalOverlay onClick={() => setExpandedImage(null)}>
-                <ModalImage src={expandedImage} alt="Imagem expandida" />
-              </ModalOverlay>
-            )}
+            <ModalOverlay onClick={() => setExpandedImage(null)}>
+              <ModalImage 
+                src={expandedImage} 
+                alt="Imagem expandida" 
+                onClick={(e) => e.stopPropagation()} 
+              />
+              <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
+            </ModalOverlay>
+          )}
           </ArticleContainer>
         </ArticleWrapper>
 
