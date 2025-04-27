@@ -4,12 +4,11 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
   padding: 0 2rem; /* Espaço nas laterais */
 `;
 
 const SidebarContainer = styled.div`
-  display: column; /* Altera para flex para alinhar os itens horizontalmente */
+  display: grid; 
   overflow-x: auto;
   justify-content: center;
   gap: 1.5rem; /* Aumenta o espaçamento entre os itens */

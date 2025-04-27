@@ -271,9 +271,9 @@ const MockArticlePage = () => {
           </ArticleContainer>
         </ArticleWrapper>
 
-        {relatedArticles.length > 0 && (
+        {mockRelatedArticles.length > 0 && (
           <SidebarWrapper>
-            <Sidebar articles={relatedArticles} />
+            <Sidebar articles={mockRelatedArticles} />
           </SidebarWrapper>
         )}
       </MainContent>
