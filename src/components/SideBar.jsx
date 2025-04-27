@@ -9,7 +9,7 @@ const Wrapper = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-  display: flex;
+  display: column;
   overflow-x: auto;
   justify-content: center;
   gap: 1rem;
