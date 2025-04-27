@@ -9,10 +9,10 @@ const Wrapper = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-  display: column;
+  display: flex; /* Altera para flex para alinhar os itens horizontalmente */
   overflow-x: auto;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem; /* Aumenta o espaçamento entre os itens */
   width: 100%;
   max-width: 1200px;
   padding: 1rem 0;
@@ -38,8 +38,8 @@ const SidebarTitulo = styled.h2`
 `;
 
 const SidebarItem = styled.div`
-  min-width: 12rem;
-  max-width: 12rem;
+  min-width: 16rem; /* Aumenta a largura mínima */
+  max-width: 16rem; /* Aumenta a largura máxima */
   justify-content: space-between;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -48,7 +48,7 @@ const SidebarItem = styled.div`
   overflow: hidden;
 
   @media (max-width: 768px) {
-    width: 100%;
+    width: 100%; /* Ajusta para ocupar toda a largura em telas menores */
   }
 
 `;
