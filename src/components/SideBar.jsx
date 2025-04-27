@@ -88,7 +88,8 @@ const Sidebar = ({ articles }) => {
         <SidebarContainer>
           {articles.filter(article => article.isVisible).map((article) => (
             <SidebarItem key={article.id}>
-              <SidebarImage src="article.banner" alt="Imagem do artigo" />
+              {/* Corrigido para exibir a imagem do banner corretamente */}
+              <SidebarImage src={article.banner} alt={`Imagem do artigo: ${article.title}`} />
               <CategoryTag>{article.category}</CategoryTag>
               <ArticleLink to={`/articles/${article.slug}`}>{article.title}</ArticleLink>
             </SidebarItem>
