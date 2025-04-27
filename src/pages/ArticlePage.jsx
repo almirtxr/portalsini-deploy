@@ -42,13 +42,13 @@ const SidebarWrapper = styled.div`
 
 
 const ArticleContainer = styled.div`
-  max-width: 900px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 2rem;
+  padding: 2rem 8rem;
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
