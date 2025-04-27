@@ -9,7 +9,7 @@ const Wrapper = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-  display: flex; /* Altera para flex para alinhar os itens horizontalmente */
+  display: column; /* Altera para flex para alinhar os itens horizontalmente */
   overflow-x: auto;
   justify-content: center;
   gap: 1.5rem; /* Aumenta o espaçamento entre os itens */
