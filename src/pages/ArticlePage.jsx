@@ -37,6 +37,7 @@ const ArticleWrapper = styled.div`
 const SidebarWrapper = styled.div`
   flex: 1;
   min-width: 280px;
+  flex-direction: column;
 `;
 
 
@@ -109,10 +110,6 @@ const CloseButton = styled.button`
   }
 `;
 
-const SidebarContainer = styled.div`
-  margin-top: 2rem;
-  width: 100%;
-`;
 
 const ShareButton = styled.button`
   display: flex;

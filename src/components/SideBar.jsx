@@ -53,6 +53,13 @@ const SidebarItem = styled.div`
 
 `;
 
+const SidebarImage = styled.img`
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
+  object-fit: cover;
+`;
+
 const ArticleLink = styled(Link)`
   text-decoration: none;
   color: black;
@@ -81,6 +88,7 @@ const Sidebar = ({ articles }) => {
         <SidebarContainer>
           {articles.filter(article => article.isVisible).map((article) => (
             <SidebarItem key={article.id}>
+              <SidebarImage src="article.imageUrl" alt="Imagem do artigo" />
               <CategoryTag>{article.category}</CategoryTag>
               <ArticleLink to={`/articles/${article.slug}`}>{article.title}</ArticleLink>
             </SidebarItem>
