@@ -16,41 +16,43 @@ const Container = styled.div`
 
 const MainContent = styled.div`
   display: flex;
+  flex-direction: column; /* Alterado para column em mobile primeiro */
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   padding: 1rem;
-  margin-top: 4rem;
+  margin-top: 3.5rem; /* Reduzido para evitar sobreposição */
   gap: 1rem;
-  flex-wrap: wrap;
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
 
-  @media (max-width: 768px) {
-    padding: 0.5rem;
-    margin-top: 3.5rem;
-    gap: 0.5rem;
+  @media (min-width: 769px) {
+    flex-direction: row; /* Linha em desktop */
+    align-items: flex-start;
+    margin-top: 5rem;
+    padding: 2rem;
   }
 `;
 
 const ArticleWrapper = styled.div`
-  flex: 3;
-  min-width: 0; /* Permite que o conteúdo se ajuste em telas pequenas */
   width: 100%;
-  
+  order: 1; /* Artigo primeiro em mobile */
+
   @media (min-width: 769px) {
-    min-width: 300px;
+    flex: 3;
+    order: initial;
     margin-right: -1rem;
   }
 `;
 
 const SidebarWrapper = styled.div`
-  flex: 1;
-  min-width: 0; /* Permite que o conteúdo se ajuste em telas pequenas */
   width: 100%;
-  
+  order: 2; /* Sidebar depois em mobile */
+
   @media (min-width: 769px) {
-    min-width: 280px;
+    flex: 1;
+    order: initial;
     margin-left: -1rem;
   }
 `;
@@ -62,15 +64,13 @@ const ArticleContainer = styled.div`
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 1.5rem;
+  padding: 1rem;
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  
-  @media (max-width: 480px) {
-    padding: 1rem;
-    box-shadow: none;
-    border-radius: 0;
+
+  @media (min-width: 769px) {
+    padding: 1.5rem;
   }
 `;
 

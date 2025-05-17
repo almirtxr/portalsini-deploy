@@ -1,11 +1,64 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Sidebar from '../components/SideBar';
 import { Share2 } from 'lucide-react';
 
-// ... aqui ficam todos os styled-components (Container, MainContent, etc), você pode copiar os mesmos que já usou.
+// Mock data - substitua pelos seus dados reais
+const mockArticle = {
+  id: 1,
+  slug: 'artigo-exemplo',
+  title: 'Como Criar Aplicações React Responsivas',
+  summary: 'Um guia completo para desenvolver aplicações que se adaptam a qualquer dispositivo',
+  author: 'João Silva',
+  date: '2023-05-15',
+  category: 'Desenvolvimento',
+  content: `
+    <p>Desenvolver aplicações responsivas é essencial nos dias de hoje. Com a variedade de dispositivos disponíveis, seu site precisa se adaptar perfeitamente a cada um deles.</p>
+    
+    <h2>1. Mobile-First Approach</h2>
+    <p>Sempre comece projetando para dispositivos móveis primeiro. Isso garante que sua aplicação será funcional mesmo em telas pequenas.</p>
+    <img src="https://via.placeholder.com/800x400?text=Mobile+First" alt="Mobile First Design">
+    
+    <h2>2. Media Queries</h2>
+    <p>Use media queries para adaptar seu layout em diferentes breakpoints. Exemplo comum:</p>
+    <pre><code>@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}</code></pre>
+    
+    <h2>3. Imagens Responsivas</h2>
+    <p>Sempre defina <code>max-width: 100%</code> para imagens. Isso evita que ultrapassem os limites do container.</p>
+    <img src="https://via.placeholder.com/1000x500?text=Responsive+Images" alt="Imagens responsivas">
+    
+    <p>Com essas técnicas, você pode criar aplicações que funcionam bem em qualquer dispositivo!</p>
+  `
+};
+
+const mockRelatedArticles = [
+  {
+    id: 2,
+    title: 'Princípios do Design Responsivo',
+    summary: 'Conheça os fundamentos do design que se adapta a qualquer tela',
+    category: 'Design',
+    date: '2023-04-20'
+  },
+  {
+    id: 3,
+    title: 'CSS Grid vs Flexbox',
+    summary: 'Quando usar cada uma dessas poderosas técnicas de layout',
+    category: 'Desenvolvimento',
+    date: '2023-03-15'
+  },
+  {
+    id: 4,
+    title: 'Otimização para Dispositivos Móveis',
+    summary: 'Técnicas para melhorar performance em smartphones',
+    category: 'Performance',
+    date: '2023-02-10'
+  }
+];
+
+// Componentes estilizados (copiados da sua implementação com ajustes)
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,63 +67,61 @@ const Container = styled.div`
 
 const MainContent = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  padding: 2rem;
-  margin-top: 5rem;
-  gap: 2rem;
-  flex-wrap: wrap;
+  align-items: center;
+  padding: 1rem;
+  margin-top: 3.5rem;
+  gap: 1rem;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 1.5rem;
+  @media (min-width: 769px) {
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 5rem;
+    padding: 2rem;
   }
 `;
 
 const ArticleWrapper = styled.div`
-  flex: 3;
-  min-width: 300px;
+  width: 100%;
+  order: 1;
+
+  @media (min-width: 769px) {
+    flex: 3;
+    order: initial;
+    margin-right: -1rem;
+  }
 `;
 
 const SidebarWrapper = styled.div`
-  flex: 1;
-  min-width: 300px;
+  width: 100%;
+  order: 2;
+
+  @media (min-width: 769px) {
+    flex: 1;
+    order: initial;
+    margin-left: -1rem;
+  }
 `;
 
-
 const ArticleContainer = styled.div`
-  max-width: 900px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 2rem;
+  padding: 1rem;
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    display: block;
-    margin: 1rem 0;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-
-    &:hover {
-      transform: scale(1.02);
-    }
-  }
-
-  p {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    padding: 1rem;
+  @media (min-width: 769px) {
+    padding: 1.5rem;
   }
 `;
 
@@ -80,23 +131,62 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: fadeIn 0.3s forwards;
+  
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
 `;
 
 const ModalImage = styled.img`
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 95%;
+  max-height: 95vh;
   border-radius: 8px;
-  cursor: pointer;
+  cursor: zoom-out;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+  animation: zoomIn 0.3s forwards;
+  
+  @keyframes zoomIn {
+    to { transform: scale(1); }
+  }
 `;
 
-const SidebarContainer = styled.div`
-  margin-top: 2rem;
-  width: 100%;
+const CloseButton = styled.button`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  @media (max-width: 480px) {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
 `;
 
 const ShareButton = styled.button`
@@ -110,176 +200,186 @@ const ShareButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+  margin: 0.5rem 0;
 
   &:hover {
     background: #F8F8FF;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem;
   }
 `;
 
 const TitleContainer = styled.div`
   text-align: left;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
+  width: 100%;
 
   h1 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 400;
     color: #555;
+    line-height: 1.4;
   }
 
   p {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #777;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+    
+    h1 {
+      font-size: 1.5rem;
+    }
+    
+    h2 {
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+    
+    h1 {
+      font-size: 1.3rem;
+    }
+    
+    h2 {
+      font-size: 1rem;
+    }
+    
+    p {
+      font-size: 0.85rem;
+    }
   }
 `;
 
-const mockArticle = {
-  id: '123',
-  title: 'DA INCLUSÃO AO DESAFIO: a universidade que acolhe é a mesma que exclui',
-  summary: 'Resumo do artigo para teste local.',
-  author: 'Nome do Autor',
-  date: new Date().toISOString(),
-  content: `
-    <p>Este é um conteúdo <strong>simulado</strong> para testes locais.</p>
-    <img src="https://via.placeholder.com/600x300" alt="Imagem de exemplo" />
-    <p>Mais texto de exemplo para simular um artigo.</p>
-    
+const Header = styled.header`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 1rem;
+  z-index: 100;
+`;
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur lobortis pulvinar ullamcorper. 
-    Duis ultricies elementum sem sit amet interdum. Sed bibendum sodales dignissim. Cras ac iaculis metus. Vivamus hendrerit accumsan lobortis. 
-    Ut fermentum in sem sed gravida. Curabitur luctus molestie purus vel pellentesque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-    In id tempus nunc. Pellentesque eu ex in nisl sagittis finibus. Suspendisse risus lacus, vestibulum non facilisis pulvinar, gravida a mi.</p>
+const Footer = styled.footer`
+  background: #f8f9fa;
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: auto;
+`;
 
-    Nunc fermentum quam eget mauris lacinia scelerisque. Morbi pretium varius ante porta fermentum. Etiam vulputate libero a augue aliquam 
-    scelerisque. Etiam vitae ipsum facilisis, efficitur augue non, consequat ligula. Sed tincidunt consectetur blandit. Pellentesque dictum 
-    consequat metus, eu consectetur tellus congue sit amet. Aenean nunc urna, aliquet at vulputate a, varius nec lacus. Nulla ut urna ac nisi 
-    dapibus lacinia. Proin at felis porttitor, hendrerit nisi vel, ornare ante. In rutrum turpis quis augue ultrices, in lobortis felis volutpat. 
-    Proin ligula nulla, lacinia ac porttitor non, mollis a sem. Maecenas ultricies elit sed nibh luctus accumsan. Praesent at ex eget nulla 
-    venenatis mattis.
+const SideBar = ({ articles }) => (
+  <div style={{
+    background: '#fff',
+    padding: '1.5rem',
+    borderRadius: '8px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+  }}>
+    <h3>Artigos Relacionados</h3>
+    <ul style={{ listStyle: 'none', padding: 0 }}>
+      {articles.map(article => (
+        <li key={article.id} style={{ marginBottom: '1rem', paddingBottom: '1rem', borderBottom: '1px solid #eee' }}>
+          <h4 style={{ margin: '0 0 0.5rem 0' }}>{article.title}</h4>
+          <p style={{ margin: 0, fontSize: '0.9rem', color: '#666' }}>{article.summary}</p>
+          <small style={{ color: '#999' }}>{article.date}</small>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
 
-    Proin vitae sollicitudin lorem. Donec at dictum risus, nec tempor orci. Quisque sagittis feugiat nisi sed tincidunt. Donec gravida, 
-    mauris vel bibendum pretium, turpis risus hendrerit risus, rutrum commodo sapien odio sit amet nulla. Vivamus aliquet nisi malesuada tortor 
-    egestas tristique. Nam sit amet pretium est, nec auctor velit. Donec rhoncus lorem sed tincidunt mattis. Ut ut congue eros, a commodo magna. 
-    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam sed vulputate tellus.
-
-    Pellentesque mollis risus in neque tincidunt fermentum. Suspendisse at turpis nisi. Praesent non sem ut est ornare gravida eget non sem. 
-    Vestibulum quis malesuada ligula, eu bibendum neque. Nulla molestie lacus feugiat lorem placerat semper. Etiam in neque a risus sodales 
-    malesuada et id lorem. Integer fringilla vulputate risus, sit amet pulvinar nisl accumsan eu. Sed lacinia sodales ultrices. Maecenas sed metus
-     pretium orci ultricies venenatis. Nulla vel viverra tortor. Etiam libero diam, pharetra gravida lorem ac, condimentum tincidunt quam.
-
-    Vestibulum venenatis quis tortor at auctor. Mauris nec magna eget nisl volutpat facilisis. Mauris congue, erat vitae varius sollicitudin, 
-    justo quam tristique ante, eu auctor velit augue mollis dolor. Nam at sem urna. Donec suscipit odio eget volutpat fermentum. Sed sit amet 
-    enim massa. Pellentesque varius ex sit amet felis interdum semper. Nullam sit amet sem ac augue tincidunt imperdiet non sed magna. Fusce 
-    fermentum, nisi sed accumsan vulputate, sapien eros scelerisque est, tincidunt vulputate ipsum velit in dui. Integer risus velit, mattis 
-    sed mollis quis, ultricies in arcu. Sed tincidunt leo id feugiat volutpat. Nam quis lobortis purus. Suspendisse quis libero congue, porta 
-    sapien convallis, consequat velit. Quisque urna turpis, dignissim id molestie at, blandit ac enim. 
-    `,
-  category: 'categoria-exemplo',
-};
-
-const mockRelatedArticles = [
-    {
-      id: '124',
-      title: 'Artigo Relacionado 1',
-      slug: 'relacionado-1',
-      summary: 'Este é um resumo do artigo relacionado 1.',
-      thumbnail: 'https://via.placeholder.com/400x200',
-      category: 'categoria-exemplo',
-    },
-    {
-      id: '125',
-      title: 'Artigo Relacionado 2',
-      slug: 'relacionado-2',
-      summary: 'Este é um resumo do artigo relacionado 2.',
-      thumbnail: 'https://via.placeholder.com/400x200',
-      category: 'categoria-exemplo',
-    },
-  ];
-  
-
-const MockArticlePage = () => {
-  const [article, setArticle] = useState(null);
-  const [relatedArticles, setRelatedArticles] = useState([]);
+// Componente principal
+const ArticlePageMock = () => {
   const [expandedImage, setExpandedImage] = useState(null);
   const articleContentRef = useRef(null);
 
-  useEffect(() => {
-    // Simula carregamento de dados
-    setTimeout(() => {
-      setArticle(mockArticle);
-      setRelatedArticles(mockRelatedArticles);
-    }, 500);
-  }, []);
-
-  useEffect(() => {
-    if (articleContentRef.current && article?.content) {
-      const images = articleContentRef.current.querySelectorAll('img');
-      const handleClick = (event) => setExpandedImage(event.target.src);
-      images.forEach((img) => img.addEventListener('click', handleClick));
-      return () => images.forEach((img) => img.removeEventListener('click', handleClick));
+  // Simula o efeito de clique nas imagens
+  const handleImageClick = (e) => {
+    if (e.target.tagName === 'IMG') {
+      setExpandedImage(e.target.src);
     }
-  }, [article]);
+  };
 
-  if (!article) return <div>Carregando mock...</div>;
-
-  const handleShare = async () => {
-    const url = window.location.href;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: article.title, url });
-      } catch (e) {
-        console.error('Erro ao compartilhar:', e);
-      }
-    } else {
-      navigator.clipboard.writeText(url);
-      alert('Link copiado!');
-    }
+  const handleShare = () => {
+    alert('Funcionalidade de compartilhamento ativada!\nURL: ' + window.location.href);
   };
 
   return (
     <Container>
-      <Header />
+      <Header>
+        <h1 style={{ margin: 0 }}>Logo do Site</h1>
+      </Header>
+      
       <MainContent>
         <ArticleWrapper>
           <ArticleContainer>
             <TitleContainer>
-              <h1>{article.title}</h1>
-              <h2>{article.summary}</h2>
+              <h1>{mockArticle.title}</h1>
+              <h2>{mockArticle.summary}</h2>
               <p>
-                <i>{article.author} - {new Date(article.date).toLocaleDateString('pt-BR')}</i>
+                <i>
+                  {mockArticle.author} - {new Date(mockArticle.date).toLocaleDateString('pt-BR')} | 
+                </i>
               </p>
             </TitleContainer>
 
             <ShareButton onClick={handleShare}>
-              <Share2 /> Compartilhar
+              <Share2 size={18} /> Compartilhar
             </ShareButton>
 
-            <div ref={articleContentRef} dangerouslySetInnerHTML={{ __html: article.content }} />
-
+            <div 
+              className="article-content" 
+              ref={articleContentRef}
+              onClick={handleImageClick}
+              dangerouslySetInnerHTML={{ __html: mockArticle.content }} 
+              style={{
+                width: '100%',
+                lineHeight: '1.6',
+                fontFamily: 'Arial, sans-serif',
+                color: '#333'
+              }}
+            />
+            
             {expandedImage && (
               <ModalOverlay onClick={() => setExpandedImage(null)}>
-                <ModalImage src={expandedImage} alt="Imagem expandida" />
+                <ModalImage 
+                  src={expandedImage} 
+                  alt="Imagem expandida" 
+                  onClick={(e) => e.stopPropagation()} 
+                />
+                <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
               </ModalOverlay>
             )}
           </ArticleContainer>
         </ArticleWrapper>
 
-        {mockRelatedArticles.length > 0 && (
-          <SidebarWrapper>
-            <Sidebar articles={mockRelatedArticles} />
-          </SidebarWrapper>
-        )}
+        <SidebarWrapper>
+          <SideBar articles={mockRelatedArticles} />
+        </SidebarWrapper>
       </MainContent>
-      <Footer />
+      
+      <Footer>
+        <p>© 2023 Meu Site - Todos os direitos reservados</p>
+      </Footer>
     </Container>
   );
 };
 
-export default MockArticlePage;
+export default ArticlePageMock;
