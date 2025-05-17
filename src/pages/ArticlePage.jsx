@@ -20,7 +20,7 @@ const MainContent = styled.div`
   align-items: flex-start;
   padding: 2rem;
   margin-top: 5rem;
-  gap: 2rem;
+  gap: 1rem;
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
@@ -32,6 +32,8 @@ const MainContent = styled.div`
 const ArticleWrapper = styled.div`
   flex: 3;
   min-width: 300px;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const SidebarWrapper = styled.div`
@@ -48,7 +50,7 @@ const ArticleContainer = styled.div`
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 2rem 8rem;
+  padding: 2rem;
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
