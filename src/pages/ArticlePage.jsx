@@ -20,8 +20,11 @@ const MainContent = styled.div`
   align-items: flex-start;
   padding: 2rem;
   margin-top: 5rem;
-  gap: 6rem;
+  gap: 1rem; /* Reduzido de 2rem para 1rem para diminuir o espaço entre os componentes */
   flex-wrap: wrap;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -29,18 +32,28 @@ const MainContent = styled.div`
   }
 `;
 
+
 const ArticleWrapper = styled.div`
   flex: 3;
   min-width: 300px;
-  display: flex;
-  justify-content: center;
+  margin-right: -1rem; /* Move o artigo ligeiramente para a direita */
+  
+  @media (max-width: 768px) {
+    margin-right: 0; /* Remove o deslocamento em telas menores */
+  }
 `;
 
 const SidebarWrapper = styled.div`
   flex: 1;
   min-width: 280px;
   flex-direction: column;
+  margin-left: -1rem; /* Move a sidebar ligeiramente para a esquerda */
+  
+  @media (max-width: 768px) {
+    margin-left: 0; /* Remove o deslocamento em telas menores */
+  }
 `;
+
 
 
 const ArticleContainer = styled.div`
