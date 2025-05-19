@@ -207,7 +207,10 @@ const ArticlePage = () => {
   if (!articleContentRef.current || !article?.content) return;
 
   const observer = new MutationObserver(() => {
+    console.log('Buscando imagens…');
+
     const images = articleContentRef.current.querySelectorAll('img');
+    console.log(articleContentRef.current?.querySelectorAll('img'));
 
     images.forEach((image) => {
       image.style.cursor = 'pointer';
