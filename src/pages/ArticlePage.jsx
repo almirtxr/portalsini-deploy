@@ -32,6 +32,7 @@ const MainContent = styled.div`
 const ArticleWrapper = styled.div`
   flex: 3;
   min-width: 300px;
+  display: flex;
   justify-content: flex-end;
 `;
 
@@ -39,12 +40,11 @@ const SidebarWrapper = styled.div`
   flex: 1;
   min-width: 280px;
   flex-direction: column;
-  padding: 2rem;
 `;
 
 
 const ArticleContainer = styled.div`
-  max-width: 900px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
   align-items: center;
