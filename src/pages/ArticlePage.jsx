@@ -64,13 +64,15 @@ const ArticleContainer = styled.div`
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 1rem;
+  padding: 1.5rem;
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-
-  @media (min-width: 769px) {
-    padding: 1.5rem;
+  
+  @media (max-width: 480px) {
+    padding: 1rem;
+    box-shadow: none;
+    border-radius: 0;
   }
 `;
 

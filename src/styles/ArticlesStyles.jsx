@@ -21,34 +21,27 @@ export const ArticleStyles = () => (
       margin-bottom: 1.2rem;
     }
 
-    /* Imagens normais - centralizadas */
-    .article-content img:not([data-type="image-with-text"] img) {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      margin: 1.5rem auto;
-      cursor: pointer;
-      border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s ease;
-    }
-
-    /* Efeito de hover para mostrar que é clicável */
-    .article-content img:not([data-type="image-with-text"] img):hover {
-      transform: scale(1.01);
-    }
-
-    /* Container para imagens que não são parte de image-with-text */
+    /* Centraliza imagens que são únicas dentro de <p> */
     .article-content p:has(> img:only-child) {
       text-align: center;
     }
 
+    /* Estilos genéricos para imagens */
     .article-content img {
+      display: block;
       max-width: 100%;
       height: auto;
-      margin: 1rem 0;
+      margin: 1rem auto;
       cursor: pointer;
       border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    /* Efeito de hover para mostrar que é clicável */
+    .article-content img:hover {
+      transform: scale(1.01);
     }
 
     /* Estilos para imagem com texto */
@@ -64,6 +57,8 @@ export const ArticleStyles = () => (
       border-radius: 4px;
       object-fit: cover;
       margin: 0; /* Resetar margin para evitar problemas de espaçamento */
+      box-shadow: none;
+      transition: none;
     }
 
     .article-content div[data-type="image-with-text"] .content {
@@ -87,12 +82,10 @@ export const ArticleStyles = () => (
       .article-content div[data-type="image-with-text"][data-align="left"] {
         flex-direction: column;
       }
-      
+
       .article-content div[data-type="image-with-text"] img {
         max-width: 100%;
       }
     }
-    
-    /* Adicione aqui seus outros estilos já existentes */
   `}</style>
 );
