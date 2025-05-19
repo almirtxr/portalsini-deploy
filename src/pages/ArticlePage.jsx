@@ -204,35 +204,28 @@ const ArticlePage = () => {
   }, [slug]);
 
   useEffect(() => {
-    if (articleContentRef.current && article?.content) {
-      // Seleciona todas as imagens no conteúdo
-      const images = articleContentRef.current.querySelectorAll('img');
-      
-      const handleClick = (event) => {
-        // Impede que o clique propague para outros elementos
+  if (!articleContentRef.current || !article?.content) return;
+
+  const observer = new MutationObserver(() => {
+    const images = articleContentRef.current.querySelectorAll('img');
+
+    images.forEach((image) => {
+      image.style.cursor = 'pointer';
+      image.onclick = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        
-        // Define a imagem para ser exibida no modal
         setExpandedImage(event.target.src);
       };
-  
-      // Adiciona o evento de clique a todas as imagens
-      images.forEach((image) => {
-        image.addEventListener('click', handleClick);
-        
-        // Adiciona cursor pointer para indicar que é clicável
-        image.style.cursor = 'pointer';
-      });
-  
-      // Limpa os event listeners quando o componente é desmontado
-      return () => {
-        images.forEach((image) => {
-          image.removeEventListener('click', handleClick);
-        });
-      };
-    }
-  }, [article]);
+    });
+  });
+
+  observer.observe(articleContentRef.current, { childList: true, subtree: true });
+
+  return () => {
+    observer.disconnect();
+  };
+}, [article]);
+
 
   useEffect(() => {
     const handleEscKey = (event) => {
