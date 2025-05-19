@@ -97,8 +97,8 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalImage = styled.img`
-  max-width: 95%;
-  max-height: 95vh;
+  max-width: 100%;
+  max-height: 100%;
   border-radius: 8px;
   cursor: zoom-out;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);

@@ -30,7 +30,7 @@ export const ArticleStyles = () => (
     .article-content img {
       display: block;
       max-width: 100%;
-      height: auto;
+      height: 100%;
       margin: 1rem auto;
       cursor: pointer;
       border-radius: 4px;
