@@ -163,6 +163,7 @@ const ArticlePage = () => {
   const [error, setError] = useState(null);
   const articleContentRef = useRef(null);
 
+
   useEffect(() => {
     const fetchArticle = async () => {
       try {
@@ -298,8 +299,15 @@ const ArticlePage = () => {
             <ArticleStyles />
             <div 
               className="article-content" 
-              ref={articleContentRef} 
-              dangerouslySetInnerHTML={{ __html: article.content }} 
+              ref={articleContentRef}
+              onClick={handleClick}
+              dangerouslySetInnerHTML={{ __html: article.content }}
+              style={{
+                width: '100%',
+                lineHeight: '1.6',
+                fontFamily: 'Arial, sans-serif',
+                color: '#333'
+              }}
             />
             
             {expandedImage && (
