@@ -205,7 +205,7 @@ const ArticlePage = () => {
   useEffect(() => {
     if (articleContentRef.current && article?.content) {
       // Seleciona todas as imagens no conteúdo
-      const images = articleContentRef.current.querySelectorAll('.article-content img');
+      const images = articleContentRef.current.querySelectorAll('img');
       
       const handleClick = (event) => {
         // Impede que o clique propague para outros elementos
