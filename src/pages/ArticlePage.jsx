@@ -16,64 +16,42 @@ const Container = styled.div`
 
 const MainContent = styled.div`
   display: flex;
-  flex-direction: column; /* Alterado para column em mobile primeiro */
   justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  margin-top: 3.5rem; /* Reduzido para evitar sobreposição */
-  gap: 1rem;
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  align-items: flex-start;
+  padding: 2rem;
+  margin-top: 5rem;
+  gap: 2rem;
+  flex-wrap: wrap;
 
-  @media (min-width: 769px) {
-    flex-direction: row; /* Linha em desktop */
-    align-items: flex-start;
-    margin-top: 5rem;
-    padding: 2rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1.5rem;
   }
 `;
 
 const ArticleWrapper = styled.div`
-  width: 100%;
-  order: 1; /* Artigo primeiro em mobile */
-
-  @media (min-width: 769px) {
-    flex: 3;
-    order: initial;
-    margin-right: -1rem;
-  }
+  flex: 3;
+  min-width: 300px;
 `;
 
 const SidebarWrapper = styled.div`
-  width: 100%;
-  order: 2; /* Sidebar depois em mobile */
-
-  @media (min-width: 769px) {
-    flex: 1;
-    order: initial;
-    margin-left: -1rem;
-  }
+  flex: 1;
+  min-width: 280px;
+  flex-direction: column;
 `;
 
+
 const ArticleContainer = styled.div`
-  max-width: 100%;
+  max-width: 900px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 1.5rem;
+  padding: 2rem;
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  
-  @media (max-width: 480px) {
-    padding: 1rem;
-    box-shadow: none;
-    border-radius: 0;
-  }
 `;
 
 const ModalOverlay = styled.div`
@@ -97,8 +75,8 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalImage = styled.img`
-  max-width: 100%;
-  max-height: 100%;
+  max-width: 90%;
+  max-height: 90vh;
   border-radius: 8px;
   cursor: zoom-out;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -113,32 +91,25 @@ const ModalImage = styled.img`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 20px;
+  right: 20px;
   background: rgba(255, 255, 255, 0.2);
   color: white;
   border: none;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 20px;
   
   &:hover {
     background: rgba(255, 255, 255, 0.3);
   }
-
-  @media (max-width: 480px) {
-    top: 10px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
-  }
 `;
+
 
 const ShareButton = styled.button`
   display: flex;
@@ -151,85 +122,34 @@ const ShareButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
-  margin: 0.5rem 0;
 
   &:hover {
     background: #F8F8FF;
-  }
-
-  @media (max-width: 480px) {
-    width: 100%;
-    justify-content: center;
-    padding: 0.75rem;
   }
 `;
 
 const TitleContainer = styled.div`
   text-align: left;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  width: 100%;
+  gap: 1rem;
 
   h1 {
-    font-size: 1.75rem;
-    margin-bottom: 0.25rem;
-    line-height: 1.3;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
   }
 
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 400;
     color: #555;
-    line-height: 1.4;
   }
 
   p {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #777;
   }
-
-  @media (max-width: 768px) {
-    margin-bottom: 1rem;
-    
-    h1 {
-      font-size: 1.5rem;
-    }
-    
-    h2 {
-      font-size: 1.1rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    gap: 0.5rem;
-    
-    h1 {
-      font-size: 1.3rem;
-    }
-    
-    h2 {
-      font-size: 1rem;
-    }
-    
-    p {
-      font-size: 0.85rem;
-    }
-  }
-`;
-
-const Loading = styled.div`
-  padding: 2rem;
-  text-align: center;
-  font-size: 1.2rem;
-`;
-
-const ErrorMessage = styled.div`
-  padding: 2rem;
-  text-align: center;
-  color: #d32f2f;
-  font-size: 1.2rem;
 `;
 
 const ArticlePage = () => {
@@ -282,23 +202,27 @@ const ArticlePage = () => {
 
   useEffect(() => {
     if (articleContentRef.current && article?.content) {
+      // Seleciona todas as imagens no conteúdo
       const images = articleContentRef.current.querySelectorAll('.article-content img');
       
       const handleClick = (event) => {
+        // Impede que o clique propague para outros elementos
         event.preventDefault();
         event.stopPropagation();
+        
+        // Define a imagem para ser exibida no modal
         setExpandedImage(event.target.src);
       };
   
+      // Adiciona o evento de clique a todas as imagens
       images.forEach((image) => {
         image.addEventListener('click', handleClick);
-        image.style.cursor = 'pointer';
         
-        // Garante que imagens não ultrapassem a largura do container
-        image.style.maxWidth = '100%';
-        image.style.height = 'auto';
+        // Adiciona cursor pointer para indicar que é clicável
+        image.style.cursor = 'pointer';
       });
   
+      // Limpa os event listeners quando o componente é desmontado
       return () => {
         images.forEach((image) => {
           image.removeEventListener('click', handleClick);
@@ -322,15 +246,15 @@ const ArticlePage = () => {
   }, [expandedImage]);
 
   if (loading) {
-    return <Loading>Carregando...</Loading>;
+    return <div>Carregando...</div>;
   }
 
   if (error) {
-    return <ErrorMessage>{error}</ErrorMessage>;
+    return <div>{error}</div>;
   }
 
   if (!article) {
-    return <ErrorMessage>Artigo não encontrado</ErrorMessage>;
+    return <div>Artigo não encontrado</div>;
   }
 
   const handleShare = async () => {
@@ -366,7 +290,7 @@ const ArticlePage = () => {
             </TitleContainer>
 
             <ShareButton onClick={handleShare}>
-              <Share2 size={18} /> Compartilhar
+              <Share2 /> Compartilhar
             </ShareButton>
 
             <ArticleStyles />
@@ -377,15 +301,15 @@ const ArticlePage = () => {
             />
             
             {expandedImage && (
-              <ModalOverlay onClick={() => setExpandedImage(null)}>
-                <ModalImage 
-                  src={expandedImage} 
-                  alt="Imagem expandida" 
-                  onClick={(e) => e.stopPropagation()} 
-                />
-                <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
-              </ModalOverlay>
-            )}
+            <ModalOverlay onClick={() => setExpandedImage(null)}>
+              <ModalImage 
+                src={expandedImage} 
+                alt="Imagem expandida" 
+                onClick={(e) => e.stopPropagation()} 
+              />
+              <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
+            </ModalOverlay>
+          )}
           </ArticleContainer>
         </ArticleWrapper>
 
