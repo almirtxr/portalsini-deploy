@@ -44,8 +44,8 @@ export const ArticleStyles = () => (
     }
 
     .article-content img {
-      max-width: 100%;
-      height: auto;
+      max-width: 100% !important;
+      height: auto !important;
       margin: 1rem 0;
       cursor: pointer;
       border-radius: 4px;
