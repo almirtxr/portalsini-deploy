@@ -7,7 +7,7 @@ export default function NewsletterSignup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("/api/subscribe/subscribe", {
+    const res = await fetch("https://portalsini-backend-deploy.fly.dev/api/subscribe/subscribe", {
       method: "POST",
       body: JSON.stringify({ email }),
       headers: { "Content-Type": "application/json" },
