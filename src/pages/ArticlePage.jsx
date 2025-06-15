@@ -7,6 +7,7 @@ import Footer from '../components/Footer';
 import Sidebar from '../components/SideBar';
 import { Share2 } from 'lucide-react';
 import { ArticleStyles } from '../styles/ArticlesStyles';
+import NewsletterSignup from '../components/NewsletterSignUp';
 
 const Container = styled.div`
   display: flex;
@@ -27,6 +28,18 @@ const MainContent = styled.div`
     flex-direction: column;
     padding: 1.5rem;
   }
+`;
+
+const NewsletterSignUp = styled.div`
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem;
+  background: #f8f8ff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 `;
 
 const ArticleWrapper = styled.div`
@@ -310,6 +323,10 @@ const ArticlePage = () => {
             </ModalOverlay>
           )}
           </ArticleContainer>
+          <NewsletterSignUp>
+            <h3>Inscreva-se na nossa Newsletter</h3>
+            <p>Receba as últimas notícias e atualizações diretamente no seu e-mail.</p>
+          </NewsletterSignUp>
         </ArticleWrapper>
 
         {relatedArticles.length > 0 && (
