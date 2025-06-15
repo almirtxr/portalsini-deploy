@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FeaturedArticle from '../components/FeaturedArticle';
 import ArticleGrid from '../components/ArticleGrid';
+import NewsletterSignup from '../components/NewsletterSignUp';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -40,6 +41,10 @@ const Index = () => {
         <Section>
           <SectionTitle>Outras notícias</SectionTitle>
           <ArticleGrid />
+        </Section>
+        <Section>
+          <SectionTitle>Assine nossa newsletter</SectionTitle>
+          <NewsletterSignup />
         </Section>
       </MainContent>
       <Footer />
