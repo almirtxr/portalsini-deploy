@@ -322,12 +322,12 @@ const ArticlePage = () => {
               <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
             </ModalOverlay>
           )}
-          </ArticleContainer>
           <NewsletterSignUpContainer>
             <h2>Inscreva-se na nossa Newsletter</h2>
             <p>Receba as últimas notícias e atualizações diretamente no seu e-mail.</p>
             <NewsletterSignup />
           </NewsletterSignUpContainer>
+          </ArticleContainer>
         </ArticleWrapper>
 
         {relatedArticles.length > 0 && (
