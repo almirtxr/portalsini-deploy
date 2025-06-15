@@ -33,7 +33,7 @@ const MainContent = styled.div`
 const NewsletterSignUpContainer = styled.div`
   margin-top: 2rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   padding: 1rem;
   background: #f8f8ff;
   border-radius: 8px;
