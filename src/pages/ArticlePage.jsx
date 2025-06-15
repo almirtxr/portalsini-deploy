@@ -322,9 +322,6 @@ const ArticlePage = () => {
               <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
             </ModalOverlay>
           )}
-            <NewsletterSignUpContainer>
-              <NewsletterSignup />
-            </NewsletterSignUpContainer>
           </ArticleContainer>
         </ArticleWrapper>
 
@@ -333,6 +330,12 @@ const ArticlePage = () => {
             <Sidebar articles={relatedArticles} />
           </SidebarWrapper>
         )}
+
+        <NewsletterSignUpContainer>
+          <h2>Inscreva-se na nossa Newsletter</h2>
+          <p>Receba as últimas notícias e atualizações diretamente no seu e-mail.</p>
+          <NewsletterSignup />
+        </NewsletterSignUpContainer>
       </MainContent>
       <Footer />
     </Container>
