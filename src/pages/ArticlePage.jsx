@@ -30,7 +30,7 @@ const MainContent = styled.div`
   }
 `;
 
-const NewsletterSignUp = styled.div`
+const NewsletterSignUpContainer = styled.div`
   margin-top: 2rem;
   width: 100%;
   max-width: 600px;
@@ -322,11 +322,10 @@ const ArticlePage = () => {
               <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
             </ModalOverlay>
           )}
+            <NewsletterSignUpContainer>
+              <NewsletterSignup />
+            </NewsletterSignUpContainer>
           </ArticleContainer>
-          <NewsletterSignUp>
-            <h3>Inscreva-se na nossa Newsletter</h3>
-            <p>Receba as últimas notícias e atualizações diretamente no seu e-mail.</p>
-          </NewsletterSignUp>
         </ArticleWrapper>
 
         {relatedArticles.length > 0 && (
