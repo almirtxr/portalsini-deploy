@@ -2,12 +2,37 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+`;
+
+const Heading = styled.h2`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+  text-align: center;
+`;
+
+const Description = styled.p`
+  font-size: 1rem;
+  color: #444;
+  text-align: center;
+  margin-bottom: 1.5rem;
+`;
+
 const Form = styled.form`
   display: flex;
+  flex-direction: row;
   gap: 12px;
-  width: 100%;
-  max-width: 400px;
-  margin-top: 8px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled.input`
@@ -17,11 +42,10 @@ const Input = styled.input`
   border-radius: 6px;
   font-size: 16px;
   outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
   background: #faf9fa;
 
   &:focus {
-    border: 1.5px solid #c78a47;
+    border-color: #c78a47;
     box-shadow: 0 0 0 2px #ffe4ea;
     background: #fff;
   }
@@ -41,12 +65,12 @@ const Button = styled.button`
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(187, 24, 50, 0.08);
+  box-shadow: 0 2px 8px rgba(199, 138, 71, 0.3);
   transition: background 0.2s, transform 0.1s;
 
   &:hover,
   &:focus {
-    background: #c78a47
+    background: #b77b3f;
     transform: translateY(-2px) scale(1.03);
   }
 `;
@@ -54,8 +78,9 @@ const Button = styled.button`
 const SuccessMsg = styled.p`
   color: #000000;
   font-weight: bold;
-  margin-top: 12px;
+  margin-top: 16px;
   font-size: 1.1rem;
+  text-align: center;
 `;
 
 export default function NewsletterSignup() {
@@ -75,19 +100,26 @@ export default function NewsletterSignup() {
     if (res.ok) setSubmitted(true);
   };
 
-  return submitted ? (
-    <SuccessMsg>Inscrição concluída!</SuccessMsg>
-  ) : (
-    <Form onSubmit={handleSubmit}>
-      <Input
-        type="email"
-        placeholder="Seu e-mail"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <Button type="submit">Inscrever-se</Button>
-    </Form>
+  return (
+    <Wrapper>
+      {submitted ? (
+        <SuccessMsg>Inscrição concluída! 🎉</SuccessMsg>
+      ) : (
+        <>
+          <Heading>Receba novidades por e-mail</Heading>
+          <Description>Inscreva-se na nossa newsletter para atualizações exclusivas do Portal Sîni.</Description>
+          <Form onSubmit={handleSubmit}>
+            <Input
+              type="email"
+              placeholder="Seu e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Button type="submit">Inscrever-se</Button>
+          </Form>
+        </>
+      )}
+    </Wrapper>
   );
 }
-// This component allows users to subscribe to a newsletter by entering their email.
