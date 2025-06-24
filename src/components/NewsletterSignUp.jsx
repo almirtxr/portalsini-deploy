@@ -57,7 +57,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  background: #c78a47;
+  background: #E07B00;
   color: #fff;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -106,7 +106,7 @@ export default function NewsletterSignup() {
         <SuccessMsg>Inscrição concluída! 🎉</SuccessMsg>
       ) : (
         <>
-          <Heading>Receba novidades por e-mail</Heading>
+          <Heading>📬 Fique por dentro! Assine a newsletter do Portal Síni</Heading>
           <Description>Inscreva-se na nossa newsletter para atualizações exclusivas do Portal Sîni.</Description>
           <Form onSubmit={handleSubmit}>
             <Input
