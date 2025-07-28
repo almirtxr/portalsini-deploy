@@ -70,29 +70,54 @@ export const ArticleStyles = () => (
       flex: 1;
     }
 
-    .article-content div[data-type="journalistic-box"] {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem;
-      border: 2px solid #BB1832;
-      border-radius: 8px;
-      margin: 1.5rem 0;
-      background-color: #fef8f8;
+    .article-content div[data-type="floating-box"] {
+      padding: 0.5rem;
+      border: 3px solid #333;
+      margin: 1rem;
+      background: white;
+      width: 45%; /* Ocupa menos da metade da largura para o texto fluir */
+      box-sizing: border-box;
     }
 
-    .article-content div[data-type="journalistic-box"] img {
-      max-width: 150px;
-      height: auto;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-
-    .article-content div[data-type="journalistic-box"] p {
-      /* Estilos específicos para o texto dentro do box, se necessário */
+    .article-content div[data-type="floating-box"] p {
+      border: none;
+      background: transparent;
+      padding: 0.75rem;
+      font-family: 'Helvetica', sans-serif;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-align: center;
+      line-height: 1.3;
+      color: #333;
       margin: 0;
-      font-size: 0.95rem;
-      line-height: 1.4;
     }
+
+    /* Regras de alinhamento */
+    .article-content div[data-align="left"] {
+      float: left;
+      margin-left: 0;
+      margin-right: 1.5em; /* Espaço entre o box e o texto */
+    }
+
+    .article-content div[data-align="right"] {
+      float: right;
+      margin-right: 0;
+      margin-left: 1.5em; /* Espaço entre o box e o texto */
+    }
+
+    .article-content div[data-align="center"] {
+      float: none;
+      display: block;
+      margin: 1.5em auto; /* Centraliza o bloco */
+    }
+
+    /* IMPORTANTE: Clearfix */
+    /* Adicione isso ao container do conteúdo do seu artigo para evitar que 
+      os floats quebrem o layout do container pai */
+    .article-content::after {
+      content: "";
+      display: table;
+      clear: both;
 
     /* Alinhamento direito - Coloca a imagem à direita */
     .article-content div[data-type="image-with-text"][data-align="right"] {
