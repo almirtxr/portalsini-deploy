@@ -70,6 +70,30 @@ export const ArticleStyles = () => (
       flex: 1;
     }
 
+    .article-content div[data-type="journalistic-box"] {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      border: 2px solid #BB1832;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      background-color: #fef8f8;
+    }
+
+    .article-content div[data-type="journalistic-box"] img {
+      max-width: 150px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .article-content div[data-type="journalistic-box"] p {
+      /* Estilos específicos para o texto dentro do box, se necessário */
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
     /* Alinhamento direito - Coloca a imagem à direita */
     .article-content div[data-type="image-with-text"][data-align="right"] {
       flex-direction: row-reverse;
