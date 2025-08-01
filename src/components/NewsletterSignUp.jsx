@@ -106,7 +106,7 @@ export default function NewsletterSignup() {
         <SuccessMsg>Inscrição concluída! 🎉</SuccessMsg>
       ) : (
         <>
-          <Heading>📬 Fique por dentro! Assine a newsletter do Portal Síni</Heading>
+          <Heading>📬 Fique por dentro! Assine a newsletter do Portal Sîni</Heading>
           <Description>Inscreva-se na nossa newsletter para atualizações exclusivas do Portal Sîni.</Description>
           <Form onSubmit={handleSubmit}>
             <Input

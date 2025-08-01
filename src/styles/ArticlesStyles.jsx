@@ -1,6 +1,20 @@
 // styles/ArticleStyles.jsx
+
 export const ArticleStyles = () => (
   <style jsx global>{`
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden; /* Isso impede o scroll horizontal em todo o site */
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
     .article-content {
       width: 100%;
       font-size: 1.1rem;

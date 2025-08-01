@@ -13,20 +13,30 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+  align-items: center;
 `;
 
 const MainContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 2rem;
+  width: 100%;
+  max-width: 1400px;
+  padding: 2rem; /* Padding para desktop */
   margin-top: 5rem;
-  gap: 1rem;
+  gap: 2rem; 
   flex-wrap: wrap;
 
-  @media (max-width: 768px) {
+  @media (max-width: 992px) { /* Ponto de quebra para o sidebar ir para baixo */
     flex-direction: column;
-    padding: 1.5rem;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    padding: 1rem; /* Padding menor para celular */
+    margin-top: 4rem;
   }
 `;
 
@@ -34,39 +44,56 @@ const NewsletterSignUpContainer = styled.div`
   margin-top: 2rem;
   width: 100%;
   max-width: 800px;
-  padding: 1rem;
+  padding: 2rem; /* Padding para Desktop */
   background: #f8f8ff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem; /* Padding menor para mobile */
+  }
 `;
 
 const ArticleWrapper = styled.div`
-  flex: 3;
-  min-width: 300px;
-  display: flex;
-  justify-content: flex-end;
+  flex: 3; /* Ocupa 3/4 do espaço */
+  max-width: 850px; /* Largura máxima para o artigo */
+  min-width: 300px; /* Garante que não fique muito espremido */
+  width: 100%;
 `;
 
-const SidebarWrapper = styled.div`
-  flex: 1;
-  min-width: 280px;
-  flex-direction: column;
+
+const SidebarWrapper = styled.aside` /* <aside> para melhor semântica */
+  flex: 1; /* Ocupa 1/4 do espaço */
+  min-width: 300px;
+  max-width: 400px;
+  width: 100%;
+  position: sticky; /* Sidebar fica fixa enquanto rola */
+  top: 7rem; /* Distância do topo */
+
+  @media (max-width: 992px) {
+    position: static; /* Desativa o sticky quando empilhado */
+    max-width: 850px; /* Permite ocupar a mesma largura do artigo */
+  }
 `;
 
 
 const ArticleContainer = styled.div`
-  max-width: 1000px;
+  max-width: 1000px; /* Mantém o limite, mas o ArticleWrapper controla o principal */
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding: 2rem;
+  padding: 2.5rem; /* Padding para Desktop */
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem; /* Padding vertical e horizontal para mobile */
+  }
 `;
 
 const ModalOverlay = styled.div`
