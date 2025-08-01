@@ -22,7 +22,7 @@ export const ArticleStyles = () => (
     }
 
     /* Imagens normais - centralizadas */
-    .article-content img:not([data-type="image-with-text"] img) {
+    .article-content > p > img:only-child {
       display: block;
       max-width: 100%;
       height: auto;
@@ -32,53 +32,66 @@ export const ArticleStyles = () => (
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.2s ease;
     }
-
-    /* Efeito de hover para mostrar que é clicável */
-    .article-content img:not([data-type="image-with-text"] img):hover {
+    
+    .article-content > p > img:only-child:hover {
       transform: scale(1.01);
     }
+    
+    /* --- ESTILOS PARA IMAGE-WITH-TEXT --- */
 
-    /* Container para imagens que não são parte de image-with-text */
-    .article-content p:has(> img:only-child) {
-      text-align: center;
-    }
-
-    .article-content img {
-      max-width: 100% !important;
-      height: auto !important;
-      margin: 1rem 0;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    /* Estilos para imagem com texto */
     .article-content div[data-type="image-with-text"] {
       display: flex;
-      gap: 16px;
-      margin: 16px 0;
       align-items: flex-start;
+      gap: 1.5rem; /* Espaçamento entre imagem e texto */
+      margin: 2rem 0;
+    }
+
+    .article-content div[data-type="image-with-text"][data-align="right"] {
+      flex-direction: row-reverse; /* Imagem vai para a direita */
     }
 
     .article-content div[data-type="image-with-text"] img {
-      max-width: 300px;
+      max-width: 40%; /* Ajuste para ser mais flexível que um valor fixo */
+      flex-shrink: 0; /* Impede a imagem de encolher */
+      height: auto;
       border-radius: 4px;
-      object-fit: cover;
-      margin: 0; /* Resetar margin para evitar problemas de espaçamento */
+      margin: 0; /* Remove margens extras */
     }
 
     .article-content div[data-type="image-with-text"] .content {
-      flex: 1;
+      flex: 1; /* Ocupa o espaço restante */
     }
+
+    /* --- ESTILOS PARA FLOATING-BOX --- */
 
     .article-content div[data-type="floating-box"] {
       padding: 0.5rem;
       border: 3px solid #333;
-      margin: 1rem;
+      margin: 0.5rem;
       background: white;
-      width: 45%; /* Ocupa menos da metade da largura para o texto fluir */
+      width: 45%;
+      max-width: 350px;
       box-sizing: border-box;
     }
 
+    .article-content div[data-type="floating-box"][data-align="left"] {
+      float: left;
+      margin-left: 0;
+      margin-right: 1.5em;
+    }
+
+    .article-content div[data-type="floating-box"][data-align="right"] {
+      float: right;
+      margin-right: 0;
+      margin-left: 1.5em;
+    }
+
+    .article-content div[data-type="floating-box"][data-align="center"] {
+      float: none;
+      display: block;
+      margin: 1.5em auto;
+    }
+    
     .article-content div[data-type="floating-box"] p {
       border: none;
       background: transparent;
@@ -92,56 +105,35 @@ export const ArticleStyles = () => (
       margin: 0;
     }
 
-    /* Regras de alinhamento */
-    .article-content div[data-align="left"] {
-      float: left;
-      margin-left: 0;
-      margin-right: 1.5em; /* Espaço entre o box e o texto */
-    }
-
-    .article-content div[data-align="right"] {
-      float: right;
-      margin-right: 0;
-      margin-left: 1.5em; /* Espaço entre o box e o texto */
-    }
-
-    .article-content div[data-align="center"] {
-      float: none;
-      display: block;
-      margin: 1.5em auto; /* Centraliza o bloco */
-    }
-
-    /* IMPORTANTE: Clearfix */
-    /* Adicione isso ao container do conteúdo do seu artigo para evitar que 
-      os floats quebrem o layout do container pai */
+    /* IMPORTANTE: Clearfix para os floats */
     .article-content::after {
       content: "";
       display: table;
       clear: both;
-
-    /* Alinhamento direito - Coloca a imagem à direita */
-    .article-content div[data-type="image-with-text"][data-align="right"] {
-      flex-direction: row-reverse;
     }
 
-    /* Alinhamento esquerdo (padrão) - Coloca a imagem à esquerda */
-    .article-content div[data-type="image-with-text"][data-align="left"] {
-      flex-direction: row;
-    }
+    /* ======================================= */
+    /* === MEDIA QUERY PARA RESPONSIVIDADE === */
+    /* ======================================= */
 
-    /* Responsividade para mobile */
     @media (max-width: 768px) {
-      .article-content div[data-type="image-with-text"],
-      .article-content div[data-type="image-with-text"][data-align="right"],
-      .article-content div[data-type="image-with-text"][data-align="left"] {
-        flex-direction: column;
+      /* Responsividade para ImageWithText */
+      .article-content div[data-type="image-with-text"] {
+        flex-direction: column !important; /* Empilha os itens! */
       }
-      
-      .article-content div[data-type="image-with-text"] img {
-        max-width: 100%;
+
+      .article-content div[data-type="image-with-text"] img,
+      .article-content div[data-type="image-with-text"] .content {
+        max-width: 100%; /* Garante que ambos ocupem a largura total */
+        width: 100%;
+      }
+
+      /* Responsividade para FloatingBox */
+      .article-content div[data-type="floating-box"] {
+        float: none; /* Desativa o float em telas pequenas */
+        width: 100%;  /* Ocupa a largura total */
+        margin: 1.5rem 0; /* Ajusta a margem para o fluxo vertical */
       }
     }
-    
-    /* Adicione aqui seus outros estilos já existentes */
   `}</style>
 );
