@@ -42,7 +42,7 @@ const LogoContainer = styled.div`
 
 const LineAuthor = styled.div`
   width: 100%;
-  height: 2px;
+  height: 1px;
   gradient: linear-gradient(to right, #c78a47, #000);
   background-color: #000;
 `;
@@ -51,6 +51,7 @@ const AuthorContainer = styled.div`
   text-align: center;
   background-color:rgb(117, 77, 33);
   padding: 1rem;
+  widith: 100%;
 `;
 
 const AuthorText = styled(Link)`
