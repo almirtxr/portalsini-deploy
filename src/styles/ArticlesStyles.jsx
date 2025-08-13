@@ -131,16 +131,42 @@ export const ArticleStyles = () => (
     /* ======================================= */
 
     @media (max-width: 768px) {
-      /* Responsividade para ImageWithText */
+  /* Responsividade para ImageWithText - mantém lado a lado mas menor */
+  .article-content div[data-type="image-with-text"] {
+    gap: 0.75rem; /* Diminui o espaço entre imagem e texto */
+    margin: 1.5rem 0; /* Diminui a margem vertical */
+  }
+
+  .article-content div[data-type="image-with-text"] img {
+    max-width: 35%; /* Diminui a imagem para 35% no mobile */
+  }
+
+  .article-content div[data-type="image-with-text"] .content {
+    font-size: 0.95rem; /* Diminui ligeiramente o texto no mobile */
+  }
+
+  /* Responsividade para FloatingBox - mantém como estava */
+  .article-content div[data-type="floating-box"] {
+    float: none;
+    width: 100%;
+    margin: 1.5rem 0;
+  }
+}
+
+    /* Para telas muito pequenas - imagem ainda menor */
+    @media (max-width: 480px) {
       .article-content div[data-type="image-with-text"] {
-        flex-direction: column !important; /* Empilha os itens! */
+        gap: 0.5rem;
       }
 
-      .article-content div[data-type="image-with-text"] img,
-      .article-content div[data-type="image-with-text"] .content {
-        max-width: 100%; /* Garante que ambos ocupem a largura total */
-        width: 100%;
+      .article-content div[data-type="image-with-text"] img {
+        max-width: 30%; /* Ainda menor em telas muito pequenas */
       }
+
+      .article-content div[data-type="image-with-text"] .content {
+        font-size: 0.9rem;
+      }
+    }
 
       /* Responsividade para FloatingBox */
       .article-content div[data-type="floating-box"] {

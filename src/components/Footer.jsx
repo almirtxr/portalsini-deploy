@@ -51,7 +51,7 @@ const AuthorContainer = styled.div`
   text-align: center;
   background-color:rgb(117, 77, 33);
   padding: 1rem;
-  widith: 100%;
+  width: 100%;
 `;
 
 const AuthorText = styled(Link)`

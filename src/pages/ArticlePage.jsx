@@ -75,7 +75,7 @@ const ArticleWrapper = styled.div`
   
   /* Mobile específico */
   @media (max-width: 768px) {
-    padding: 15px;
+    padding: 1px;
     
     img {
       margin: 12px auto;
