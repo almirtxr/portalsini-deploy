@@ -157,18 +157,31 @@ const Arrow = styled.button`
 const FeaturedArticle = () => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0); // Inicializa com 0 para evitar problemas
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
+        setError(null);
         const fetchedArticles = await getArticles();
         const visibleArticles = fetchedArticles.filter(article => article.isVisible);
         const featuredArticles = visibleArticles.filter(article => article.featured);
 
-        setArticles(featuredArticles.length > 0 ? featuredArticles : [visibleArticles[visibleArticles.length - 1]]);
+        const finalArticles = featuredArticles.length > 0
+          ? featuredArticles
+          : visibleArticles.length > 0
+            ? [visibleArticles[visibleArticles.length - 1]]
+            : [];
+
+        setArticles(finalArticles);
+        if (finalArticles.length > 0) {
+          setCurrentIndex(finalArticles.length - 1);
+        }
       } catch (error) {
         console.error('Erro ao buscar artigos:', error);
+        setError(error.message);
+        setArticles([]);
       } finally {
         setIsLoading(false);
       }
@@ -177,31 +190,39 @@ const FeaturedArticle = () => {
     fetchArticles();
   }, []);
 
-  // Atualiza o índice para o último artigo após os artigos serem carregados
+  // Efeito do carousel só deve rodar se há artigos
   useEffect(() => {
-    if (articles.length > 0) {
-      setCurrentIndex(articles.length - 1);
-    }
-  }, [articles]);
-
-  useEffect(() => {
+    if (articles.length <= 1) return; // Não faz sentido carousel com 1 ou 0 itens
+    
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % articles.length);
     }, 5000);
-
+    
     return () => clearInterval(interval);
-  }, [articles]);
+  }, [articles.length]);
 
   const nextArticle = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % articles.length);
+    if (articles.length > 0) {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % articles.length);
+    }
   };
 
   const prevArticle = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + articles.length) % articles.length);
+    if (articles.length > 0) {
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + articles.length) % articles.length);
+    }
   };
 
   if (isLoading) {
     return <div>Carregando...</div>;
+  }
+  
+  if (articles.length === 0) {
+    return (
+      <div className="no-articles">
+        <p>Nenhum artigo em destaque disponível no momento.</p>
+      </div>
+    );
   }
 
   return (
