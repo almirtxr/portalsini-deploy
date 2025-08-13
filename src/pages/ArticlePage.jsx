@@ -61,6 +61,27 @@ const ArticleWrapper = styled.div`
   max-width: 850px; /* Largura máxima para o artigo */
   min-width: 300px; /* Garante que não fique muito espremido */
   width: 100%;
+  /* Todas as imagens dentro do conteúdo */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 16px auto;
+    border-radius: 8px;
+    
+    /* Remove qualquer width inline que o TipTap possa ter colocado */
+    width: auto !important;
+  }
+  
+  /* Mobile específico */
+  @media (max-width: 768px) {
+    padding: 15px;
+    
+    img {
+      margin: 12px auto;
+      border-radius: 4px;
+    }
+  }
 `;
 
 
