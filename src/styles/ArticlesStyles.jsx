@@ -142,29 +142,6 @@ export const ArticleStyles = () => (
         width: 100%;
       }
 
-  /* Responsividade para FloatingBox - mantém como estava */
-  .article-content div[data-type="floating-box"] {
-    float: none;
-    width: 100%;
-    margin: 1.5rem 0;
-  }
-}
-
-    /* Para telas muito pequenas - imagem ainda menor */
-    @media (max-width: 480px) {
-      .article-content div[data-type="image-with-text"] {
-        gap: 0.5rem;
-      }
-
-      .article-content div[data-type="image-with-text"] img {
-        max-width: 30%; /* Ainda menor em telas muito pequenas */
-      }
-
-      .article-content div[data-type="image-with-text"] .content {
-        font-size: 0.9rem;
-      }
-    }
-
       /* Responsividade para FloatingBox */
       .article-content div[data-type="floating-box"] {
         float: none; /* Desativa o float em telas pequenas */
