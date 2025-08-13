@@ -16,7 +16,7 @@ export const ArticleStyles = () => (
       box-sizing: border-box;
     }
     .article-content {
-      width: 100%;
+      max-width: 100%;
       font-size: 1.1rem;
       line-height: 1.6;
     }
@@ -38,8 +38,8 @@ export const ArticleStyles = () => (
     /* Imagens normais - centralizadas */
     .article-content > p > img:only-child {
       display: block;
-      max-width: 100%;
-      height: auto;
+      max-width: 100% !important;
+      height: auto !important;
       margin: 1.5rem auto;
       cursor: pointer;
       border-radius: 4px;
