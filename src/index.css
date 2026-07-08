@@ -99,6 +99,17 @@
   .article-content img {
     @apply my-6 mx-auto block h-auto max-w-full cursor-zoom-in rounded;
   }
+  /* Alinhamento de imagem com texto ao redor (largura vem do style inline).
+     my-1 mantém o texto próximo da imagem, acima e abaixo. */
+  .article-content img[data-align="left"] {
+    @apply float-left mr-6 my-1;
+  }
+  .article-content img[data-align="right"] {
+    @apply float-right ml-6 my-1;
+  }
+  .article-content img[data-align="full"] {
+    width: 100%;
+  }
   /* Caixas "imagem com texto" do editor (TipTap) */
   .article-content [data-type="image-with-text"] {
     @apply my-6 overflow-hidden rounded border border-neutral-200 bg-neutral-50 p-4;
