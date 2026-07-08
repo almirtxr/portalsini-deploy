@@ -12,6 +12,11 @@ import Sidebar from '../components/SideBar';
 import NewsletterSignup from '../components/NewsletterSignUp';
 
 const formatDate = (value) => {
+  if (!value) return '';
+  // Trata a data como "data pura" (YYYY-MM-DD), sem conversão de fuso,
+  // para não exibir o dia anterior em fusos negativos (ex.: UTC-3).
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(value));
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('pt-BR');
   const d = new Date(value);
   return isNaN(d.getTime()) ? '' : d.toLocaleDateString('pt-BR');
 };
