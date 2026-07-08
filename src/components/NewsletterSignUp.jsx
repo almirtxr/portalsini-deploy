@@ -1,125 +1,78 @@
-// NewsletterSignup.jsx
-import { useState } from "react";
-import styled from "styled-components";
+import { useState } from 'react';
+import { ArrowRight, Check } from 'lucide-react';
 
-const Wrapper = styled.div`
-  font-family: 'Inter', sans-serif;
-  width: 100%;
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-`;
-
-const Heading = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 0.5rem;
-  text-align: center;
-`;
-
-const Description = styled.p`
-  font-size: 1rem;
-  color: #444;
-  text-align: center;
-  margin-bottom: 1.5rem;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
-`;
-
-const Input = styled.input`
-  flex: 1;
-  padding: 0.75rem 1rem;
-  border: 1.5px solid #c78a47;
-  border-radius: 6px;
-  font-size: 16px;
-  outline: none;
-  background: #faf9fa;
-
-  &:focus {
-    border-color: #c78a47;
-    box-shadow: 0 0 0 2px #ffe4ea;
-    background: #fff;
-  }
-
-  &::placeholder {
-    color: #000000;
-    font-style: italic;
-  }
-`;
-
-const Button = styled.button`
-  background: #E07B00;
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(199, 138, 71, 0.3);
-  transition: background 0.2s, transform 0.1s;
-
-  &:hover,
-  &:focus {
-    background: #b77b3f;
-    transform: translateY(-2px) scale(1.03);
-  }
-`;
-
-const SuccessMsg = styled.p`
-  color: #000000;
-  font-weight: bold;
-  margin-top: 16px;
-  font-size: 1.1rem;
-  text-align: center;
-`;
+const SUBSCRIBE_URL = 'https://portalsini-backend-deploy.fly.dev/api/subscribe/subscribe';
 
 export default function NewsletterSignup() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(
-      "https://portalsini-backend-deploy.fly.dev/api/subscribe/subscribe",
-      {
-        method: "POST",
+    setStatus('loading');
+    try {
+      const res = await fetch(SUBSCRIBE_URL, {
+        method: 'POST',
         body: JSON.stringify({ email }),
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    if (res.ok) setSubmitted(true);
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!res.ok) throw new Error('Falha na inscrição');
+      setStatus('success');
+      setEmail('');
+    } catch (err) {
+      console.error('Erro ao inscrever na newsletter:', err);
+      setStatus('error');
+    }
   };
 
   return (
-    <Wrapper>
-      {submitted ? (
-        <SuccessMsg>Inscrição concluída! 🎉</SuccessMsg>
+    <div className="bg-ink text-white px-6 py-10 sm:px-10 sm:py-12">
+      <h2 className="font-mono text-lg font-bold uppercase tracking-[0.12em] leading-snug text-brand-yellow">
+        Receba o Portal Sîni no seu e-mail
+      </h2>
+      <p className="mt-2 max-w-md text-sm text-neutral-400">
+        Atualizações e reportagens sobre educação e saberes indígenas, direto na sua caixa de entrada.
+      </p>
+
+      {status === 'success' ? (
+        <p className="mt-6 flex items-center gap-2 font-mono text-sm uppercase tracking-wide text-brand-yellow">
+          <Check className="h-4 w-4" /> Inscrição concluída!
+        </p>
       ) : (
-        <>
-          <Heading>📬 Fique por dentro! Assine a newsletter do Portal Sîni</Heading>
-          <Description>Inscreva-se na nossa newsletter para atualizações exclusivas do Portal Sîni.</Description>
-          <Form onSubmit={handleSubmit}>
-            <Input
+        <form onSubmit={handleSubmit} className="mt-6 flex max-w-md items-end gap-3">
+          <div className="flex-1">
+            <label htmlFor="newsletter-email" className="sr-only">
+              Seu e-mail
+            </label>
+            <input
+              id="newsletter-email"
               type="email"
-              placeholder="Seu e-mail"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               required
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (status === 'error') setStatus('idle');
+              }}
+              placeholder="seu@email.com"
+              className="w-full border-0 border-b border-neutral-600 bg-transparent px-1 py-2 text-white placeholder:text-neutral-600 focus:border-brand-yellow focus:outline-none"
             />
-            <Button type="submit">Inscrever-se</Button>
-          </Form>
-        </>
+          </div>
+          <button
+            type="submit"
+            disabled={status === 'loading'}
+            aria-label="Inscrever-se"
+            className="flex h-11 w-11 shrink-0 items-center justify-center bg-brand-red text-white transition-colors hover:bg-brand-red/90 disabled:opacity-60"
+          >
+            <ArrowRight className="h-5 w-5" />
+          </button>
+        </form>
       )}
-    </Wrapper>
+
+      {status === 'error' && (
+        <p className="mt-3 font-mono text-xs uppercase tracking-wide text-brand-red">
+          Não foi possível inscrever. Tente novamente.
+        </p>
+      )}
+    </div>
   );
 }

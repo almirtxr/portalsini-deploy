@@ -1,101 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  display: flex;
-  padding: 0 2rem; /* Espaço nas laterais */
-`;
-
-const SidebarContainer = styled.div`
-  display: grid; 
-  overflow-x: auto;
-  justify-content: center;
-  gap: 1.5rem; /* Aumenta o espaçamento entre os itens */
-  width: 100%;
-  max-width: 1200px;
-  padding: 1rem 0;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-
-  @media (max-width: 768px) {
-    flex-direction: column; /* Altera a direção para coluna em telas menores */
-    align-items: center;
-  }
-`;
-
-const SidebarTitulo = styled.h2`
-  margin-bottom: 1rem;
-  text-align: center;
-  width: 100%;
-`;
-
-const SidebarItem = styled.div`
-  min-width: 16rem; /* Aumenta a largura mínima */
-  max-width: 16rem; /* Aumenta a largura máxima */
-  justify-content: space-between;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-
-  @media (max-width: 768px) {
-    width: 100%; /* Ajusta para ocupar toda a largura em telas menores */
-  }
-
-`;
-
-const SidebarImage = styled.img`
-  width: 100%;
-  height: auto;
-  border-radius: 8px 8px 0 0;
-  object-fit: cover;
-`;
-
-const ArticleLink = styled(Link)`
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-  padding: 0.5rem;
-  display: block;
-`;
-
-const CategoryTag = styled.span`
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
-  margin-left: 0.5rem;
-  margin-top: 0.5rem;
-`;
 
 const Sidebar = ({ articles }) => {
+  const list = articles
+    .filter((a) => a.isVisible)
+    .sort((a, b) => (b.reads || 0) - (a.reads || 0))
+    .slice(0, 5);
+
+  if (list.length === 0) return null;
+
   return (
-    <Wrapper>
-      <div>
-        <SidebarTitulo>Notícias relacionadas</SidebarTitulo>
-        <SidebarContainer>
-          {articles.filter(article => article.isVisible).map((article) => (
-            <SidebarItem key={article.id}>
-              {/* Corrigido para exibir a imagem do banner corretamente */}
-              <SidebarImage src={article.banner} alt={`Imagem do artigo: ${article.title}`} />
-              <CategoryTag>{article.category}</CategoryTag>
-              <ArticleLink to={`/articles/${article.slug}`}>{article.title}</ArticleLink>
-            </SidebarItem>
-          ))}
-        </SidebarContainer>
-      </div>
-    </Wrapper>
+    <div className="sticky top-28">
+      <h2 className="font-heading text-lg font-extrabold uppercase tracking-tight text-ink">
+        <span className="mark-yellow">
+          <span className="mark-bar" aria-hidden="true" />
+          <span className="mark-text">Leia também</span>
+        </span>
+      </h2>
+
+      <ul className="mt-6 flex flex-col divide-y divide-neutral-200">
+        {list.map((article) => (
+          <li key={article.id} className="py-4 first:pt-0">
+            <Link to={`/articles/${article.slug}`} className="group flex gap-3">
+              <div className="h-16 w-20 shrink-0 overflow-hidden bg-neutral-100">
+                <img
+                  src={article.banner}
+                  alt={article.title}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="min-w-0">
+                <span className="cat-label">{article.category}</span>
+                <h3 className="mt-1 line-clamp-3 text-sm font-semibold leading-snug text-ink transition-colors group-hover:text-brand-red">
+                  {article.title}
+                </h3>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

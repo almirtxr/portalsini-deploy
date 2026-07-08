@@ -1,219 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getArticleBySlug, getArticleByCategory, postArticleReads } from '../services/articleService';
-import styled from 'styled-components';
+import { Share2, Twitter, Facebook, Link2, Check } from 'lucide-react';
+import {
+  getArticleBySlug,
+  getArticleByCategory,
+  postArticleReads,
+} from '../services/articleService';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Sidebar from '../components/SideBar';
-import { Share2 } from 'lucide-react';
-import { ArticleStyles } from '../styles/ArticlesStyles';
 import NewsletterSignup from '../components/NewsletterSignUp';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-  align-items: center;
-`;
-
-const MainContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  max-width: 1400px;
-  padding: 2rem; /* Padding para desktop */
-  margin-top: 5rem;
-  gap: 2rem; 
-  flex-wrap: wrap;
-
-  @media (max-width: 992px) { /* Ponto de quebra para o sidebar ir para baixo */
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-  }
-  
-  @media (max-width: 768px) {
-    padding: 1rem; /* Padding menor para celular */
-    margin-top: 4rem;
-  }
-`;
-
-const NewsletterSignUpContainer = styled.div`
-  margin-top: 2rem;
-  width: 100%;
-  max-width: 800px;
-  padding: 2rem; /* Padding para Desktop */
-  background: #f8f8ff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  
-  @media (max-width: 768px) {
-    padding: 1.5rem 1rem; /* Padding menor para mobile */
-  }
-`;
-
-const ArticleWrapper = styled.div`
-  flex: 3; /* Ocupa 3/4 do espaço */
-  max-width: 850px; /* Largura máxima para o artigo */
-  min-width: 300px; /* Garante que não fique muito espremido */
-  width: 100%;
-  /* Todas as imagens dentro do conteúdo */
-  img {
-    max-width: 100% !important;
-    height: auto !important;
-    display: block;
-    margin: 16px auto;
-    border-radius: 8px;
-    
-    /* Remove qualquer width inline que o TipTap possa ter colocado */
-    width: auto !important;
-  }
-  
-  /* Mobile específico */
-  @media (max-width: 768px) {
-    padding: 1px;
-    
-    img {
-      margin: 12px auto;
-      border-radius: 4px;
-    }
-  }
-`;
-
-
-const SidebarWrapper = styled.aside` /* <aside> para melhor semântica */
-  flex: 1; /* Ocupa 1/4 do espaço */
-  min-width: 300px;
-  max-width: 400px;
-  width: 100%;
-  position: sticky; /* Sidebar fica fixa enquanto rola */
-  top: 7rem; /* Distância do topo */
-
-  @media (max-width: 992px) {
-    position: static; /* Desativa o sticky quando empilhado */
-    max-width: 850px; /* Permite ocupar a mesma largura do artigo */
-  }
-`;
-
-
-const ArticleContainer = styled.div`
-  max-width: 1000px; /* Mantém o limite, mas o ArticleWrapper controla o principal */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  padding: 2.5rem; /* Padding para Desktop */
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-
-  @media (max-width: 768px) {
-    padding: 1.5rem 1rem; /* Padding vertical e horizontal para mobile */
-  }
-`;
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: fadeIn 0.3s forwards;
-  
-  @keyframes fadeIn {
-    to { opacity: 1; }
-  }
-`;
-
-const ModalImage = styled.img`
-  max-width: 90%;
-  max-height: 90vh;
-  border-radius: 8px;
-  cursor: zoom-out;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transform: scale(0.95);
-  transition: transform 0.3s ease;
-  animation: zoomIn 0.3s forwards;
-  
-  @keyframes zoomIn {
-    to { transform: scale(1); }
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 20px;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-`;
-
-
-const ShareButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: white;
-  color: #000;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-
-  &:hover {
-    background: #F8F8FF;
-  }
-`;
-
-const TitleContainer = styled.div`
-  text-align: left;
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: #555;
-  }
-
-  p {
-    font-size: 1rem;
-    color: #777;
-  }
-`;
+const formatDate = (value) => {
+  const d = new Date(value);
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString('pt-BR');
+};
 
 const ArticlePage = () => {
   const { slug } = useParams();
@@ -222,171 +23,218 @@ const ArticlePage = () => {
   const [expandedImage, setExpandedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const articleContentRef = useRef(null);
-
+  const [copied, setCopied] = useState(false);
+  const countedSlugs = useRef(new Set());
 
   useEffect(() => {
+    let active = true;
     const fetchArticle = async () => {
       try {
         setLoading(true);
-        const articleData = await getArticleBySlug(slug);
-        
-        if (!articleData) {
-          throw new Error('Artigo não encontrado');
+        setError(null);
+        const data = await getArticleBySlug(slug);
+        if (!data) throw new Error('Artigo não encontrado');
+        if (!active) return;
+        setArticle(data);
+
+        if (data.category) {
+          getArticleByCategory(data.category)
+            .then((list) =>
+              active && setRelatedArticles(list.filter((a) => a.id !== data.id))
+            )
+            .catch((e) => console.error('Erro ao buscar relacionados:', e));
         }
-        
-        setArticle(articleData);
-        
-        if (articleData.category) {
-          fetchRelatedArticles(articleData.category, articleData.id);
+
+        // Conta a leitura só uma vez por slug nesta sessão
+        if (data.id && !countedSlugs.current.has(slug)) {
+          countedSlugs.current.add(slug);
+          postArticleReads(data.id).catch(() => {});
         }
-        
-        if (articleData.id) {
-          await postArticleReads(articleData.id);
-        }
-      } catch (error) {
-        console.error('Erro ao buscar artigo:', error);
-        setError(error.message || 'Erro ao carregar o artigo');
+      } catch (err) {
+        console.error('Erro ao buscar artigo:', err);
+        if (active) setError(err.message || 'Erro ao carregar o artigo');
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
-
-    const fetchRelatedArticles = async (category, articleId) => {
-      try {
-        const articlesData = await getArticleByCategory(category);
-        setRelatedArticles(articlesData.filter(article => article.id !== articleId));
-      } catch (error) {
-        console.error('Erro ao buscar artigos relacionados:', error);
-      }
-    };
-
     fetchArticle();
+    return () => {
+      active = false;
+    };
   }, [slug]);
 
+  // Fecha o lightbox com Esc
   useEffect(() => {
-  if (!articleContentRef.current || !article?.content) return;
+    const onKey = (e) => e.key === 'Escape' && setExpandedImage(null);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
-  const observer = new MutationObserver(() => {
-    console.log('Buscando imagens…');
+  const readingTime = useMemo(() => {
+    if (!article?.content) return 1;
+    const words = article.content
+      .replace(/<[^>]+>/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean).length;
+    return Math.max(1, Math.round(words / 200));
+  }, [article]);
 
-    const images = articleContentRef.current.querySelectorAll('img');
-    console.log(articleContentRef.current?.querySelectorAll('img'));
-
-    images.forEach((image) => {
-      image.style.cursor = 'pointer';
-      image.onclick = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        setExpandedImage(event.target.src);
-      };
-    });
-  });
-
-  observer.observe(articleContentRef.current, { childList: true, subtree: true });
-
-  return () => {
-    observer.disconnect();
-  };
-}, [article]);
-
-
-  useEffect(() => {
-    const handleEscKey = (event) => {
-      if (event.key === 'Escape' && expandedImage) {
-        setExpandedImage(null);
-      }
-    };
-  
-    window.addEventListener('keydown', handleEscKey);
-    
-    return () => {
-      window.removeEventListener('keydown', handleEscKey);
-    };
-  }, [expandedImage]);
-
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!article) {
-    return <div>Artigo não encontrado</div>;
-  }
-
-  const handleShare = async () => {
-    const url = window.location.href;
-    const title = article.title;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-      } catch (error) {
-        console.error('Erro ao compartilhar:', error);
-      }
-    } else {
-      navigator.clipboard.writeText(url);
-      alert('Link copiado para a área de transferência!');
+  const handleContentClick = (e) => {
+    if (e.target.tagName === 'IMG') {
+      setExpandedImage(e.target.currentSrc || e.target.src);
     }
   };
 
-  return (
-    <Container>
+  const url = typeof window !== 'undefined' ? window.location.href : '';
+
+  const share = async (type) => {
+    const title = article?.title || 'Portal Sîni';
+    if (type === 'native' && navigator.share) {
+      try {
+        await navigator.share({ title, url });
+      } catch { /* cancelado */ }
+      return;
+    }
+    if (type === 'copy') {
+      navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      return;
+    }
+    const targets = {
+      twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+    };
+    if (targets[type]) window.open(targets[type], '_blank', 'noopener,noreferrer');
+  };
+
+  const Shell = ({ children }) => (
+    <div className="min-h-screen bg-paper">
       <Header />
-      <MainContent>
-        <ArticleWrapper>
-          <ArticleContainer>
-            <TitleContainer>
-              <h1>{article.title}</h1>
-              <h2>{article.summary}</h2>
-              <p>
-                <i>
-                  {article.author} - {new Date(article.date).toLocaleDateString('pt-BR')} | 
-                </i>
-              </p>
-            </TitleContainer>
-
-            <ShareButton onClick={handleShare}>
-              <Share2 /> Compartilhar
-            </ShareButton>
-
-            <ArticleStyles />
-            <div 
-              className="article-content" 
-              ref={articleContentRef}
-              dangerouslySetInnerHTML={{ __html: article.content }} 
-            />
-            
-            {expandedImage && (
-            <ModalOverlay onClick={() => setExpandedImage(null)}>
-              <ModalImage 
-                src={expandedImage} 
-                alt="Imagem expandida" 
-                onClick={(e) => e.stopPropagation()} 
-              />
-              <CloseButton onClick={() => setExpandedImage(null)}>×</CloseButton>
-            </ModalOverlay>
-          )}
-          <NewsletterSignUpContainer>
-            <h2>Inscreva-se na nossa Newsletter</h2>
-            <p>Receba as últimas notícias e atualizações diretamente no seu e-mail.</p>
-            <NewsletterSignup />
-          </NewsletterSignUpContainer>
-          </ArticleContainer>
-        </ArticleWrapper>
-
-        {relatedArticles.length > 0 && (
-          <SidebarWrapper>
-            <Sidebar articles={relatedArticles} />
-          </SidebarWrapper>
-        )}
-
-      </MainContent>
+      <main className="mx-auto max-w-6xl px-4 pb-16 pt-28 sm:px-6">{children}</main>
       <Footer />
-    </Container>
+    </div>
+  );
+
+  if (loading) {
+    return (
+      <Shell>
+        <div className="mx-auto max-w-3xl animate-pulse">
+          <div className="h-3 w-24 bg-neutral-100" />
+          <div className="mt-4 h-10 w-full bg-neutral-100" />
+          <div className="mt-2 h-10 w-2/3 bg-neutral-100" />
+          <div className="mt-8 aspect-video w-full bg-neutral-100" />
+        </div>
+      </Shell>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <Shell>
+        <p className="byline py-20 text-center">{error || 'Artigo não encontrado'}</p>
+      </Shell>
+    );
+  }
+
+  const shareButtons = [
+    { type: 'copy', label: 'Copiar link', Icon: copied ? Check : Link2 },
+    { type: 'twitter', label: 'Compartilhar no X', Icon: Twitter },
+    { type: 'facebook', label: 'Compartilhar no Facebook', Icon: Facebook },
+    { type: 'native', label: 'Compartilhar', Icon: Share2 },
+  ];
+
+  return (
+    <Shell>
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
+        <article className="mx-auto min-w-0 max-w-3xl lg:mx-0">
+          <span className="cat-label">{article.category}</span>
+          <h1 className="headline mt-3 text-3xl sm:text-4xl md:text-[2.75rem]">
+            {article.title}
+          </h1>
+          {article.summary && (
+            <p className="mt-4 text-lg leading-relaxed text-neutral-600">
+              {article.summary}
+            </p>
+          )}
+
+          <div className="byline mt-5 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="text-brand-red">Por {article.author}</span>
+            <span>·</span>
+            <span>{formatDate(article.date)}</span>
+            <span>·</span>
+            <span>{readingTime} min de leitura</span>
+          </div>
+
+          {/* Compartilhar */}
+          <div className="mt-5 flex items-center gap-2 border-y border-neutral-200 py-3">
+            <span className="byline mr-1">Compartilhar</span>
+            {shareButtons.map(({ type, label, Icon }) => (
+              <button
+                key={type}
+                type="button"
+                aria-label={label}
+                onClick={() => share(type)}
+                className="rounded-full border border-neutral-300 p-2 text-ink transition-colors hover:border-brand-red hover:text-brand-red"
+              >
+                <Icon className="h-4 w-4" />
+              </button>
+            ))}
+          </div>
+
+          {/* Imagem de destaque */}
+          {article.banner && (
+            <figure className="mt-8">
+              <img
+                src={article.banner}
+                alt={article.title}
+                className="w-full bg-neutral-100 object-cover"
+              />
+            </figure>
+          )}
+
+          {/* Conteúdo */}
+          <div
+            className="article-content dropcap mt-8"
+            onClick={handleContentClick}
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
+
+          {/* Newsletter */}
+          <div className="mt-14">
+            <NewsletterSignup />
+          </div>
+        </article>
+
+        <aside className="mt-14 lg:mt-0">
+          <Sidebar articles={relatedArticles} />
+        </aside>
+      </div>
+
+      {/* Lightbox */}
+      {expandedImage && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 animate-fade-in"
+          onClick={() => setExpandedImage(null)}
+        >
+          <img
+            src={expandedImage}
+            alt="Imagem ampliada"
+            className="max-h-[90vh] max-w-[92vw] cursor-zoom-out rounded"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            type="button"
+            aria-label="Fechar"
+            onClick={() => setExpandedImage(null)}
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-2xl text-white hover:bg-white/30"
+          >
+            ×
+          </button>
+        </div>
+      )}
+    </Shell>
   );
 };
 

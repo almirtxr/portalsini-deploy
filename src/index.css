@@ -1,14 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap');
+/* ── Design tokens (shadcn/ui base + marca Portal Sîni) ─────────────────────── */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 349 78% 41%; /* brand red */
+  }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans;
+  }
+
+  ::selection {
+    @apply bg-brand-red text-white;
+  }
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ── Utilitários editoriais reutilizáveis ──────────────────────────────────── */
+@layer components {
+  /* Rótulo de categoria — mono, maiúsculo, acento da marca */
+  .cat-label {
+    @apply font-mono text-xs font-bold uppercase tracking-[0.15em] text-brand-red;
+  }
+
+  /* Assinatura / metadados — mono, maiúsculo, discreto */
+  .byline {
+    @apply font-mono text-[0.7rem] uppercase tracking-[0.12em] text-neutral-500;
+  }
+
+  /* Título editorial pesado */
+  .headline {
+    @apply font-heading font-extrabold leading-[0.98] tracking-tight text-ink;
+  }
+
+  /* Marca-texto amarelo (estilo destaque de highlighter) */
+  .mark-yellow {
+    @apply relative inline-block;
+  }
+  .mark-yellow > .mark-bar {
+    @apply pointer-events-none absolute inset-x-0 bottom-0 h-3 bg-brand-yellow;
+  }
+  .mark-yellow > .mark-text {
+    @apply relative;
+  }
+}
+
+/* ── Conteúdo do artigo (HTML vindo do editor) ──────────────────────────────── */
+@layer components {
+  .article-content {
+    @apply text-[1.075rem] leading-relaxed text-neutral-800;
+  }
+  /* Neutraliza fontes inline (font-family: Arial) herdadas do editor */
+  .article-content [style*="font-family"] {
+    font-family: inherit !important;
+  }
+  .article-content p {
+    @apply my-5;
+  }
+  .article-content h2 {
+    @apply font-heading text-2xl font-extrabold tracking-tight mt-10 mb-4 text-ink;
+  }
+  .article-content h3 {
+    @apply font-heading text-xl font-bold tracking-tight mt-8 mb-3 text-ink;
+  }
+  .article-content a {
+    @apply text-brand-red underline underline-offset-2 hover:no-underline;
+  }
+  .article-content ul {
+    @apply my-5 list-disc pl-6;
+  }
+  .article-content ol {
+    @apply my-5 list-decimal pl-6;
+  }
+  .article-content li {
+    @apply my-1;
+  }
+  .article-content blockquote {
+    @apply my-6 border-l-4 border-brand-yellow pl-4 italic text-neutral-600;
+  }
+  .article-content strong {
+    @apply font-semibold text-ink;
+  }
+  .article-content img {
+    @apply my-6 mx-auto block h-auto max-w-full cursor-zoom-in rounded;
+  }
+  /* Caixas "imagem com texto" do editor (TipTap) */
+  .article-content [data-type="image-with-text"] {
+    @apply my-6 overflow-hidden rounded border border-neutral-200 bg-neutral-50 p-4;
+  }
+  @screen sm {
+    .article-content [data-type="image-with-text"][data-align="right"] {
+      @apply float-right ml-6 w-1/2 max-w-[360px];
+    }
+    .article-content [data-type="image-with-text"][data-align="left"] {
+      @apply float-left mr-6 w-1/2 max-w-[360px];
+    }
+  }
+  .article-content [data-type="image-with-text"] img {
+    @apply my-0 w-full;
+  }
+  .article-content [data-type="image-with-text"] .content p {
+    @apply my-2 text-sm text-neutral-600;
+  }
+  /* Drop cap no primeiro parágrafo */
+  .article-content.dropcap > p:first-of-type::first-letter {
+    @apply font-heading font-extrabold text-brand-red;
+    float: left;
+    font-size: 3.4rem;
+    line-height: 0.8;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+  }
 }

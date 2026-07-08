@@ -1,248 +1,122 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getArticles } from '../services/articleService';
-
-const ArticleContainer = styled.div`
-  position: relative;
-  height: 80vh;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 0.75rem;
-  display: flex;
-  flex-direction: column; /* Permite empilhar os elementos */
-
-  @media (max-width: 768px) {
-    height: auto; /* Altura dinâmica */
-  }
-`;
-
-const ArticleImage = styled.img`
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  @media (max-width: 768px) {
-    position: static; /* Remove do fundo */
-    object-fit: contain; /* Garante que toda a imagem seja visível */
-    height: auto;
-    max-height: 100%;
-  }
-`;
-
-const Gradient = styled.div`
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-
-  @media (max-width: 768px) {
-    display: none; /* Remove o gradiente no mobile */
-  }
-`;
-
-const Content = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 2rem;
-
-  @media (max-width: 768px) {
-    position: static; /* Permite que o conteúdo vá para baixo da imagem */
-    padding: 1rem;
-    text-align: center;
-  }
-`;
-
-const Category = styled.span`
-  display: inline-block;
-  padding: 0.25rem 1rem;
-  border-radius: 9999px;
-  background-color: #BB1832;
-  color: white;
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
-
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
-  }
-`;
-
-const Title = styled.h1`
-  font-family: 'Playfair Display', serif;
-  font-size: 2.25rem;
-  color: white;
-  margin-bottom: 1rem;
-  text-align: left;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-    color: black; /* Texto preto no mobile */
-  }
-`;
-
-
-const Excerpt = styled.p`
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.125rem;
-  margin-bottom: 1.5rem;
-  max-width: 50rem;
-
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
-    color: black; /* Texto preto no mobile */
-    text-align: left;
-  }
-`;
-
-const Author = styled.p`
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  max-width: 42rem;
-
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
-    text-align: left;
-  }
-`;
-
-
-const ReadButton = styled(Link)`
-  background-color: white;
-  color: #BB1832;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  text-decoration: none;
-  display: inline-block;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-  }
-
-  @media (max-width: 768px) {
-    background-color: rgba(0, 0, 0, 0.1);
-`;
-
-const Arrow = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 1rem;
-  cursor: pointer;
-  z-index: 10;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.8);
-  }
-
-  @media (max-width: 768px) {
-    top: 43%;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 50%; /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-  ${(props) => (props.$left ? 'left: 1rem;' : 'right: 1rem;')}
-`;
 
 const FeaturedArticle = () => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0); // Inicializa com 0 para evitar problemas
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        setError(null);
-        const fetchedArticles = await getArticles();
-        const visibleArticles = fetchedArticles.filter(article => article.isVisible);
-        const featuredArticles = visibleArticles.filter(article => article.featured);
-
-        const finalArticles = featuredArticles.length > 0
-          ? featuredArticles
-          : visibleArticles.length > 0
-            ? [visibleArticles[visibleArticles.length - 1]]
-            : [];
-
-        setArticles(finalArticles);
-        if (finalArticles.length > 0) {
-          setCurrentIndex(finalArticles.length - 1);
-        }
+        const fetched = await getArticles();
+        const visible = fetched.filter((a) => a.isVisible);
+        const featured = visible.filter((a) => a.featured);
+        const final =
+          featured.length > 0
+            ? featured
+            : visible.length > 0
+              ? [visible[visible.length - 1]]
+              : [];
+        setArticles(final);
+        if (final.length > 0) setCurrentIndex(0);
       } catch (error) {
         console.error('Erro ao buscar artigos:', error);
-        setError(error.message);
         setArticles([]);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchArticles();
   }, []);
 
-  // Efeito do carousel só deve rodar se há artigos
   useEffect(() => {
-    if (articles.length <= 1) return; // Não faz sentido carousel com 1 ou 0 itens
-    
+    if (articles.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % articles.length);
-    }, 5000);
-    
+      setCurrentIndex((prev) => (prev + 1) % articles.length);
+    }, 6000);
     return () => clearInterval(interval);
   }, [articles.length]);
 
-  const nextArticle = () => {
-    if (articles.length > 0) {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % articles.length);
-    }
-  };
-
-  const prevArticle = () => {
-    if (articles.length > 0) {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + articles.length) % articles.length);
-    }
-  };
+  const go = (dir) =>
+    setCurrentIndex((prev) => (prev + dir + articles.length) % articles.length);
 
   if (isLoading) {
-    return <div>Carregando...</div>;
+    return <div className="aspect-[16/9] w-full animate-pulse bg-neutral-100" />;
   }
-  
+
   if (articles.length === 0) {
     return (
-      <div className="no-articles">
-        <p>Nenhum artigo em destaque disponível no momento.</p>
-      </div>
+      <p className="byline py-10 text-center">
+        Nenhum artigo em destaque disponível no momento.
+      </p>
     );
   }
 
+  const article = articles[currentIndex];
+
   return (
-    <ArticleContainer>
-      {articles.length > 0 && (
-        <>
-          <Arrow $left onClick={prevArticle}>❮</Arrow>
-          <ArticleImage src={articles[currentIndex].banner} alt={articles[currentIndex].title} />
-          <Gradient />
-          <Content>
-            <Category>{articles[currentIndex].category}</Category>
-            <Title>{articles[currentIndex].title}</Title>
-            <Excerpt>{articles[currentIndex].summary}</Excerpt>
-            <Author>{articles[currentIndex].author}</Author>
-            <ReadButton to={`/articles/${articles[currentIndex].slug}`}>Ler mais</ReadButton>
-          </Content>
-          <Arrow onClick={nextArticle}>❯</Arrow>
-        </>
-      )}
-    </ArticleContainer>
+    <section className="animate-fade-in">
+      <div className="group relative overflow-hidden">
+        <Link to={`/articles/${article.slug}`} className="block">
+          <div className="relative aspect-[16/10] w-full overflow-hidden sm:aspect-[16/8]">
+            <img
+              src={article.banner}
+              alt={article.title}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.15em] text-brand-yellow">
+                {article.category}
+              </span>
+              <h1 className="headline mt-3 max-w-3xl text-3xl text-white sm:text-4xl md:text-5xl">
+                {article.title}
+              </h1>
+              <p className="mt-3 hidden max-w-2xl text-sm text-neutral-200 sm:block sm:text-base">
+                {article.summary}
+              </p>
+              <span className="byline mt-4 block text-neutral-300">
+                Por {article.author}
+              </span>
+            </div>
+          </div>
+        </Link>
+
+        {articles.length > 1 && (
+          <>
+            <button
+              type="button"
+              aria-label="Anterior"
+              onClick={() => go(-1)}
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 p-2 text-white backdrop-blur-sm transition-colors hover:bg-brand-red"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              aria-label="Próximo"
+              onClick={() => go(1)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 p-2 text-white backdrop-blur-sm transition-colors hover:bg-brand-red"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+            <div className="absolute bottom-3 right-4 flex gap-1.5">
+              {articles.map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                    i === currentIndex ? 'bg-brand-yellow' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
   );
 };
 

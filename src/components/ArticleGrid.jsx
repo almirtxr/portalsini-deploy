@@ -1,131 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getArticles } from '../services/articleService';
-import styled from 'styled-components';
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  animation: fadeIn 0.5s ease-out;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-`;
-
-const Card = styled.div`
-  background-color: white;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  transition: box-shadow 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  &:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const CardLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-`;
-
-const CardImage = styled.img`
-  width: 100%;
-  height: 16rem;
-  object-fit: cover;  
-  @media (max-width: 768px) {
-    object-fit: contain; /* Garante que toda a imagem seja visível */
-    height: auto;
-    max-height: 100%;
-  }
-`;
-
-const CardContent = styled.div`
-  padding: 1.5rem;
-`;
-
-const CardCategory = styled.span`
-  color: #BB1832;
-  font-size: 0.875rem;
-  font-weight: 500;
-`;
-
-const CardTitle = styled.h3`
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
-  margin: 0.5rem 0 0.75rem;
-`;
-
-const CardExcerpt = styled.p`
-  color: #4b5563;
-  font-size: 0.875rem;
-`;
-
-const CardFooter = styled.div`
-  padding: 1.5rem;
-  padding-top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const CardMeta = styled.span`
-  color: #6b7280;
-  font-size: 0.875rem;
-`;
+const formatDate = (value) => {
+  const d = new Date(value);
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString('pt-BR');
+};
 
 const ArticleGrid = () => {
   const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const fetchedArticles = await getArticles();
-        const filteredArticles = fetchedArticles.filter(article => article.isVisible === true);
-        setArticles(filteredArticles);
+        const fetched = await getArticles();
+        setArticles(fetched.filter((a) => a.isVisible === true));
       } catch (error) {
         console.error('Erro ao buscar artigos:', error);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchArticles();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="animate-pulse">
+            <div className="aspect-[16/10] w-full bg-neutral-100" />
+            <div className="mt-4 h-3 w-1/4 bg-neutral-100" />
+            <div className="mt-3 h-5 w-3/4 bg-neutral-100" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <Grid>
-      {articles.map((articles) => (
-        <Card key={articles.id}>
-          <CardLink to={`/articles/${articles.slug}`}>
-            <CardImage src={articles.banner} alt={articles.title} />
-            <CardContent>
-              <CardCategory>{articles.category}</CardCategory>
-              <CardTitle>{articles.title}</CardTitle>
-              <CardExcerpt>{articles.excerpt}</CardExcerpt>
-            </CardContent>
-            <CardFooter>
-              <CardMeta>{articles.author}</CardMeta>
-              <CardMeta>{new Date(articles.date).toLocaleDateString()}</CardMeta>
-            </CardFooter>
-          </CardLink>
-        </Card>
+    <div className="grid grid-cols-1 gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+      {articles.map((article) => (
+        <article key={article.id} className="group animate-fade-in">
+          <Link to={`/articles/${article.slug}`} className="block">
+            <div className="aspect-[16/10] w-full overflow-hidden bg-neutral-100">
+              <img
+                src={article.banner}
+                alt={article.title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+            <div className="mt-4">
+              <span className="cat-label">{article.category}</span>
+              <h3 className="headline mt-2 text-xl leading-tight transition-colors group-hover:text-brand-red">
+                {article.title}
+              </h3>
+              {article.excerpt && (
+                <p className="mt-2 line-clamp-2 text-sm text-neutral-600">
+                  {article.excerpt}
+                </p>
+              )}
+              <div className="mt-3 flex items-center justify-between">
+                <span className="byline">Por {article.author}</span>
+                <span className="byline">{formatDate(article.date)}</span>
+              </div>
+            </div>
+          </Link>
+        </article>
       ))}
-    </Grid>
+    </div>
   );
 };
 

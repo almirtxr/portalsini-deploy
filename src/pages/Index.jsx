@@ -1,54 +1,40 @@
 import React from 'react';
-import styled from 'styled-components';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FeaturedArticle from '../components/FeaturedArticle';
 import ArticleGrid from '../components/ArticleGrid';
 import NewsletterSignup from '../components/NewsletterSignUp';
 
-const PageContainer = styled.div`
-  min-height: 100vh;
-  background-color: white;
-`;
-
-const MainContent = styled.main`
-  max-width: 75%;
-  margin: 0 auto;
-  padding: 120px 1rem 0;
-
-  @media (max-width: 768px) {
-    max-width: 95%;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  font-family: 'Playfair Display', serif;
-  font-size: 1.875rem;
-  margin-bottom: 2rem;
-`;
-
-const Section = styled.section`
-  margin: 4rem 0;
-`;
+const SectionTitle = ({ children }) => (
+  <div className="mb-8 flex items-center gap-4">
+    <h2 className="font-heading text-2xl font-extrabold uppercase tracking-tight text-ink">
+      <span className="mark-yellow">
+        <span className="mark-bar" aria-hidden="true" />
+        <span className="mark-text">{children}</span>
+      </span>
+    </h2>
+    <span className="h-px flex-1 bg-neutral-200" />
+  </div>
+);
 
 const Index = () => {
-
   return (
-    <PageContainer>
+    <div className="min-h-screen bg-paper">
       <Header />
-      <MainContent>
-        <FeaturedArticle/>
-        <Section>
-          <SectionTitle>Outras notícias</SectionTitle>
+      <main className="mx-auto max-w-6xl px-4 pb-16 pt-28 sm:px-6">
+        <FeaturedArticle />
+
+        <section className="mt-16">
+          <SectionTitle>Últimas notícias</SectionTitle>
           <ArticleGrid />
-        </Section>
-        <Section>
-          <SectionTitle>Assine nossa newsletter</SectionTitle>
+        </section>
+
+        <section className="mt-20">
           <NewsletterSignup />
-        </Section>
-      </MainContent>
+        </section>
+      </main>
       <Footer />
-    </PageContainer>
+    </div>
   );
 };
 

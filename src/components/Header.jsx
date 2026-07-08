@@ -1,109 +1,85 @@
-// Header.tsx
-import React from 'react';
-import { Menu, Search, User } from "lucide-react";
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { Menu, X, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const HeaderContainer = styled.header`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #C78A47;
-  z-index: 50;
-  border-bottom: 1px solid #ccc;
-  animation: fadeIn 0.5s ease-in-out;
-`;
-
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
-`;
-
-const HeaderContent = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 80px;
-  padding: 0 16px; /* Adiciona padding para alinhar com o contêiner */
-`;
-
-const HeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-`;
-
-const HeaderRight = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  font-family: 'Inter', sans-serif; /* Altera a fonte */
-
-  @media (max-width: 768px) {
-    .user-icon {
-      display: none; /* Oculta o ícone de usuário em telas menores */
-    }
-  }
-`;
-
-const Logo = styled.img`
-  height: 64px;
-  width: auto;
-
-  @media (max-width: 768px) {
-    height: 48px; /* Reduz o tamanho do logo em telas menores */
-  }
-`;
-
-const Button = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: black;
-  font-family: 'Inter', sans-serif; /* Altera a fonte */
-  font-size: 1rem; /* Tamanho padrão do texto */
-  transition: color 0.3s, background-color 0.3s;
-
-  &:hover {
-    color: #FFFFFF;
-    background-color: #C78A47;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 1rem; /* Aumenta o tamanho do texto em telas menores */
-    font-family: 'Inter', sans-serif; /* Altera a fonte em telas menores */
-  }
-
-  .icon {
-    height: 30px;
-    width: 30px;
-  }
-`;
+const navLinks = [
+  { to: '/', label: 'Início' },
+  { to: '/sobre', label: 'Sobre' },
+  { to: '/contato', label: 'Contato' },
+];
 
 const Header = () => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <HeaderContainer>
-      <Container>
-        <HeaderContent>
-          <HeaderLeft>
-            <Link to="/">
-              <Logo src="/marca-principal.png" alt="Logo" />
+    <header className="fixed top-0 inset-x-0 z-50 bg-paper border-b border-neutral-200">
+      {/* Faixa de acento da marca */}
+      <div className="h-1 w-full bg-brand-red" />
+
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="flex h-20 items-center justify-between">
+          <Link to="/" className="flex items-center" onClick={() => setOpen(false)}>
+            <img src="/logo-horizontal.png" alt="Portal Sîni" className="h-10 w-auto sm:h-12" />
+          </Link>
+
+          {/* Navegação desktop */}
+          <nav className="hidden items-center gap-8 md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="font-mono text-xs font-bold uppercase tracking-[0.15em] text-ink transition-colors hover:text-brand-red"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              to="/admin"
+              aria-label="Área administrativa"
+              className="rounded-full border border-neutral-300 p-2 text-ink transition-colors hover:border-brand-red hover:text-brand-red"
+            >
+              <User className="h-4 w-4" />
             </Link>
-          </HeaderLeft>
-          <HeaderRight>
-            <Link to="/sobre">
-              <Button>Sobre</Button>
+          </nav>
+
+          {/* Botão mobile */}
+          <button
+            type="button"
+            aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="md:hidden text-ink"
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Menu mobile */}
+      {open && (
+        <nav className="border-t border-neutral-200 bg-paper md:hidden animate-fade-in">
+          <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setOpen(false)}
+                className="font-mono text-sm font-bold uppercase tracking-[0.15em] text-ink py-2 transition-colors hover:text-brand-red"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Link
+              to="/admin"
+              onClick={() => setOpen(false)}
+              className="font-mono text-sm font-bold uppercase tracking-[0.15em] text-ink py-2 transition-colors hover:text-brand-red flex items-center gap-2"
+            >
+              <User className="h-4 w-4" /> Administração
             </Link>
-            <Link to="/admin">
-              <Button className="user-icon">
-                <User className="icon" />
-              </Button>
-            </Link>
-          </HeaderRight>
-        </HeaderContent>
-      </Container>
-    </HeaderContainer>
+          </div>
+        </nav>
+      )}
+    </header>
   );
 };
 

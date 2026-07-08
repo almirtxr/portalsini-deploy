@@ -1,13 +1,10 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -18,26 +15,24 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "#BB1832",
-          foreground: "#FFFFFF",
+        // ── Marca Portal Sîni ──
+        brand: {
+          red: "#BB1832",
+          tan: "#C78A47",
+          yellow: "#F9C45D",
         },
-        secondary: {
-          DEFAULT: "#C78A47",
-          foreground: "#FFFFFF",
-        },
-        accent: {
-          DEFAULT: "#F9C45D",
-          foreground: "#000000",
-        },
-        card: {
-          DEFAULT: "#FFFFFF",
-          foreground: "#000000",
-        },
+        ink: "#121212",
+        paper: "#FFFFFF",
+        // Compatibilidade com componentes shadcn existentes
+        primary: { DEFAULT: "#BB1832", foreground: "#FFFFFF" },
+        secondary: { DEFAULT: "#C78A47", foreground: "#FFFFFF" },
+        accent: { DEFAULT: "#F9C45D", foreground: "#000000" },
+        card: { DEFAULT: "#FFFFFF", foreground: "#000000" },
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        heading: ["Playfair Display", "serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        heading: ["Archivo", "Inter", "sans-serif"],
+        mono: ["'Space Mono'", "ui-monospace", "monospace"],
       },
       keyframes: {
         "fade-in": {
@@ -55,5 +50,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
