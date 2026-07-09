@@ -24,9 +24,11 @@ const getArticleByID = async (id) => {
 
 const getArticleBySlug = async (slug) => {
   try {
-    const response = await axios.get(`${API_URL}/slug/${slug}`);  // Alterado para usar /slug/
+    const response = await axios.get(`${API_URL}/slug/${slug}`);
     return response.data;
   } catch (error) {
+    // Artigo inexistente ou oculto: trata como "não encontrado".
+    if (error.response && error.response.status === 404) return null;
     console.error('Erro ao buscar artigo:', error);
     throw error;
   }
